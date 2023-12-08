@@ -1,5 +1,5 @@
+use alloy_primitives::{Address, U256};
 use dashu_float::DBig;
-use ethers::types::{Address, U256};
 
 #[derive(Debug, Clone)]
 pub struct Token {

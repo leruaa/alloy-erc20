@@ -7,11 +7,11 @@ use crate::TokenId;
 #[derive(Error, Debug)]
 pub struct Error {
     pub token: TokenId,
-    pub source: anyhow::Error,
+    pub source: InternalError,
 }
 
 impl Error {
-    pub fn new<E: Into<anyhow::Error>>(token: TokenId, source: E) -> Self {
+    pub fn new<E: Into<InternalError>>(token: TokenId, source: E) -> Self {
         Self {
             token,
             source: source.into(),
@@ -26,5 +26,11 @@ impl Display for Error {
 }
 
 #[derive(Error, Debug)]
-#[error("The token is not present in store")]
-pub struct NotInStoreError;
+pub enum InternalError {
+    #[error("The token is not present in store")]
+    NotInStore,
+    #[error(transparent)]
+    Transport(#[from] alloy_transport::TransportError),
+    #[error(transparent)]
+    Sol(#[from] alloy_sol_types::Error),
+}
