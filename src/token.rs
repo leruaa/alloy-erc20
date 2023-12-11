@@ -1,5 +1,5 @@
-use dashu_float::DBig;
 use ethers::types::{Address, U256};
+use rust_decimal::Decimal;
 
 #[derive(Debug, Clone)]
 pub struct Token {
@@ -17,11 +17,8 @@ impl Token {
         }
     }
 
-    pub fn get_balance(&self, amount: U256) -> DBig {
-        DBig::from_parts(
-            amount.to_string().parse().unwrap(),
-            -(self.decimals as isize),
-        )
+    pub fn get_balance(&self, amount: U256) -> Decimal {
+        Decimal::new(amount.to_string().parse().unwrap(), self.decimals as u32)
     }
 }
 
