@@ -11,7 +11,7 @@ use ethers::{
 use once_cell::sync::Lazy;
 use tokio::sync::{Mutex, RwLock};
 
-use crate::{error::NotInStoreError, ERC20Contract, Error, Token};
+use crate::{ERC20Contract, Error, Token};
 
 #[derive(Clone, Debug)]
 pub enum TokenId {
@@ -121,7 +121,7 @@ impl TokenStore {
                 match entry {
                     Entry::Vacant(_) => match self.known_addresses.get(&symbol) {
                         Some(a) => self.get(TokenId::Address(**a)).await,
-                        None => Err(Error::new(id, NotInStoreError)),
+                        None => Err(Error::NotInStoreError),
                     },
                     Entry::Occupied(e) => Ok(e.get().clone()),
                 }
@@ -153,12 +153,12 @@ impl TokenStore {
                         .symbol()
                         .call()
                         .await
-                        .map_err(|err| Error::new(id.clone(), err))?;
+                        .map_err(|err| Error::Ethers(err.to_string()))?;
                     let decimals = erc20
                         .decimals()
                         .call()
                         .await
-                        .map_err(|err| Error::new(id, err))?;
+                        .map_err(|err| Error::Ethers(err.to_string()))?;
 
                     let token = Arc::new(Token::new(address, &symbol, decimals));
                     let mut by_addresses = self.by_addresses.write().await;
