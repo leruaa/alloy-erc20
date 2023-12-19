@@ -9,15 +9,15 @@ edition = "2021"
 serde = ["dep:serde"]
 
 [dependencies]
-alloy-primitives = { git = "https://github.com/alloy-rs/core" }
+alloy-primitives = "0.5.1"
 alloy-sol-types = { git = "https://github.com/alloy-rs/core", features = [
     "json",
 ] }
-alloy-providers = { git = "https://github.com/alloy-rs/alloy", branch = "onbjerg/alloy-temp-provider-trait" }
-alloy-rpc-client = { git = "https://github.com/alloy-rs/alloy", branch = "onbjerg/alloy-temp-provider-trait" }
-alloy-rpc-types = { git = "https://github.com/alloy-rs/alloy", branch = "onbjerg/alloy-temp-provider-trait" }
-alloy-transport = { git = "https://github.com/alloy-rs/alloy", branch = "onbjerg/alloy-temp-provider-trait" }
-alloy-transport-http = { git = "https://github.com/alloy-rs/alloy", branch = "onbjerg/alloy-temp-provider-trait" }
+alloy-providers = { git = "https://github.com/alloy-rs/alloy" }
+alloy-rpc-client = { git = "https://github.com/alloy-rs/alloy" }
+alloy-rpc-types = { git = "https://github.com/alloy-rs/alloy" }
+alloy-transport = { git = "https://github.com/alloy-rs/alloy" }
+alloy-transport-http = { git = "https://github.com/alloy-rs/alloy" }
 # alloy-providers = { path = "../alloy/crates/providers" }
 # alloy-rpc-client = { path = "../alloy/crates/rpc-client", features = [
 #     "reqwest",
