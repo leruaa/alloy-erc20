@@ -1,5 +1,8 @@
 use alloy_primitives::{Address, U256};
-use dashu_float::DBig;
+use bigdecimal::{
+    num_bigint::{BigInt, Sign},
+    BigDecimal,
+};
 
 #[derive(Debug, Clone)]
 pub struct Token {
@@ -17,11 +20,15 @@ impl Token {
         }
     }
 
-    pub fn get_balance(&self, amount: U256) -> DBig {
-        DBig::from_parts(
-            amount.to_string().parse().unwrap(),
-            -(self.decimals as isize),
-        )
+    pub fn get_balance(&self, amount: U256) -> BigDecimal {
+        let mut bytes = [0; 32];
+
+        amount.to_big_endian(&mut bytes);
+
+        BigDecimal::from((
+            BigInt::from_bytes_be(Sign::Plus, &bytes),
+            self.decimals as i64,
+        ))
     }
 }
 
