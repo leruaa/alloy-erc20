@@ -1,4 +1,8 @@
+use std::fmt::Display;
+
 use thiserror::Error;
+
+use crate::TokenId;
 
 #[derive(Error, Debug)]
 pub struct Error {
