@@ -10,23 +10,15 @@ serde = ["dep:serde"]
 
 [dependencies]
 alloy-primitives = "0.5.1"
-alloy-sol-types = { git = "https://github.com/alloy-rs/core", features = [
-    "json",
-] }
+alloy-sol-types = { version = "0.5.1", features = ["json"] }
 alloy-providers = { git = "https://github.com/alloy-rs/alloy" }
 alloy-rpc-client = { git = "https://github.com/alloy-rs/alloy" }
 alloy-rpc-types = { git = "https://github.com/alloy-rs/alloy" }
 alloy-transport = { git = "https://github.com/alloy-rs/alloy" }
 alloy-transport-http = { git = "https://github.com/alloy-rs/alloy" }
-# alloy-providers = { path = "../alloy/crates/providers" }
-# alloy-rpc-client = { path = "../alloy/crates/rpc-client", features = [
-#     "reqwest",
-# ] }
-# alloy-rpc-types = { path = "../alloy/crates/rpc-types" }
-# alloy-transport = { path = "../alloy/crates/transport" }
 tokio = { version = "1", features = ["full"] }
 serde = { version = "1.0", features = ["derive"], optional = true }
-reqwest = "0.11"
+
 bigdecimal = "0.4"
 thiserror = "1.0"
 anyhow = "1.0"
@@ -35,6 +27,7 @@ once_cell = "1.18.0"
 
 [dev-dependencies]
 tokio = { version = "1", features = ["rt", "macros"] }
+reqwest = "0.11"
 dotenv = "0.15"
 
 

@@ -1,22 +1,20 @@
 use alloy_primitives::address;
 use alloy_providers::provider::Provider;
-use alloy_transport::BoxTransport;
-use alloy_transport_http::Http;
+use alloy_rpc_client::RpcClient;
 use dotenv::dotenv;
 use erc20::TokenStore;
-use std::sync::Arc;
+use std::{env, sync::Arc};
 
 #[tokio::test]
 async fn test_token_store() {
     dotenv().ok();
+    let eth_rpc = env::var("ETH_RPC").unwrap();
 
-    let transport = Http::<reqwest::Client>::new(
-        "https://eth-mainnet.g.alchemy.com/v2/7xeGs22pDCMlsMC5ZiasB0XfC41g0F9z"
-            .parse()
-            .unwrap(),
+    let provider = Provider::new_with_client(
+        RpcClient::builder()
+            .reqwest_http(eth_rpc.parse().unwrap())
+            .boxed(),
     );
-    let transport = BoxTransport::new(transport);
-    let provider = Provider::new(transport);
     let token_store = TokenStore::new(1, Arc::new(provider));
 
     let dai = token_store
