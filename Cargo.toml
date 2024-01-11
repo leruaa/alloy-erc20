@@ -9,8 +9,8 @@ edition = "2021"
 serde = ["dep:serde"]
 
 [dependencies]
-alloy-primitives = "0.5.1"
-alloy-sol-types = { version = "0.5.1", features = ["json"] }
+alloy-primitives = "0.6"
+alloy-sol-types = { version = "0.6", features = ["json"] }
 alloy-providers = { git = "https://github.com/alloy-rs/alloy" }
 alloy-rpc-client = { git = "https://github.com/alloy-rs/alloy" }
 alloy-rpc-types = { git = "https://github.com/alloy-rs/alloy" }
@@ -29,7 +29,3 @@ once_cell = "1.18.0"
 tokio = { version = "1", features = ["rt", "macros"] }
 reqwest = "0.11"
 dotenv = "0.15"
-
-
-[patch.crates-io]
-alloy-primitives = { git = 'https://github.com/alloy-rs/core' }
