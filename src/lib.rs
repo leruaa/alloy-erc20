@@ -1,4 +1,4 @@
-use ethers::prelude::abigen;
+use alloy_sol_types::sol;
 
 mod constants;
 mod error;
@@ -10,4 +10,4 @@ pub use error::Error;
 pub use token::Token;
 pub use token_store::{TokenId, TokenStore};
 
-abigen!(ERC20Contract, "abi/erc20.json");
+sol!(ERC20Contract, "abi/erc20.json");

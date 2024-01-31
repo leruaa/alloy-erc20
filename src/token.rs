@@ -1,9 +1,8 @@
-
+use alloy_primitives::{Address, U256};
 use bigdecimal::{
     num_bigint::{BigInt, Sign},
     BigDecimal,
 };
-use ethers::types::{Address, U256};
 
 #[derive(Debug, Clone)]
 pub struct Token {
@@ -22,12 +21,8 @@ impl Token {
     }
 
     pub fn get_balance(&self, amount: U256) -> BigDecimal {
-        let mut bytes = [0; 32];
-
-        amount.to_big_endian(&mut bytes);
-
         BigDecimal::from((
-            BigInt::from_bytes_be(Sign::Plus, &bytes),
+            BigInt::from_bytes_be(Sign::Plus, &amount.to_be_bytes::<{ U256::BYTES }>()),
             self.decimals as i64,
         ))
     }
