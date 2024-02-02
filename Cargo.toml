@@ -11,11 +11,11 @@ serde = ["dep:serde"]
 [dependencies]
 alloy-primitives = "0.6"
 alloy-sol-types = { version = "0.6", features = ["json"] }
-alloy-providers = { git = "https://github.com/alloy-rs/alloy" }
-alloy-rpc-client = { git = "https://github.com/alloy-rs/alloy" }
-alloy-rpc-types = { git = "https://github.com/alloy-rs/alloy" }
-alloy-transport = { git = "https://github.com/alloy-rs/alloy" }
-alloy-transport-http = { git = "https://github.com/alloy-rs/alloy" }
+alloy-providers = { git = "https://github.com/alloy-rs/alloy", rev = "11b8031" }
+alloy-rpc-client = { git = "https://github.com/alloy-rs/alloy", rev = "11b8031" }
+alloy-rpc-types = { git = "https://github.com/alloy-rs/alloy", rev = "11b8031" }
+alloy-transport = { git = "https://github.com/alloy-rs/alloy", rev = "11b8031" }
+alloy-transport-http = { git = "https://github.com/alloy-rs/alloy", rev = "11b8031" }
 tokio = { version = "1", features = ["full"] }
 serde = { version = "1.0", features = ["derive"], optional = true }
 
