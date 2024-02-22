@@ -21,7 +21,7 @@ impl Error {
 
 impl Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "Token {:?}: {}", self.token, self.source)
+        write!(f, "Token {}: {}", self.token, self.source)
     }
 }
 
@@ -29,8 +29,8 @@ impl Display for Error {
 pub enum InternalError {
     #[error("The token is not present in store")]
     NotInStore,
-    #[error(transparent)]
+    #[error("Failed to query token: {0}")]
     Transport(#[from] alloy_transport::TransportError),
-    #[error(transparent)]
+    #[error("Failed to decode token: {0}")]
     Sol(#[from] alloy_sol_types::Error),
 }

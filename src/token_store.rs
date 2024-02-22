@@ -1,5 +1,6 @@
 use std::{
     collections::{hash_map::Entry, HashMap},
+    fmt::{Display, Formatter},
     sync::Arc,
 };
 
@@ -18,6 +19,15 @@ use crate::{error::InternalError, ERC20Contract, Error, Token};
 pub enum TokenId {
     Symbol(String),
     Address(Address),
+}
+
+impl Display for TokenId {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        match self {
+            TokenId::Symbol(s) => write!(f, "{}", s),
+            TokenId::Address(a) => write!(f, "{}", a),
+        }
+    }
 }
 
 #[derive(Debug)]
