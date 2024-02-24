@@ -4,6 +4,7 @@ use bigdecimal::{
     BigDecimal,
 };
 
+/// A token
 #[derive(Debug, Clone)]
 pub struct Token {
     pub address: Address,

@@ -3,11 +3,17 @@ use alloy_sol_types::sol;
 mod constants;
 mod error;
 mod token;
+mod token_client;
+mod token_id;
+mod token_service;
 mod token_store;
 
-pub use constants::mainnet;
+pub use constants::*;
 pub use error::Error;
 pub use token::Token;
-pub use token_store::{TokenId, TokenStore};
+pub use token_client::TokenClient;
+pub use token_id::TokenId;
+pub use token_service::TokenService;
+pub use token_store::TokenStore;
 
 sol!(ERC20Contract, "abi/erc20.json");

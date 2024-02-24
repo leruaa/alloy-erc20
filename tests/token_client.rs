@@ -2,11 +2,11 @@ use alloy_primitives::address;
 use alloy_providers::provider::Provider;
 use alloy_rpc_client::RpcClient;
 use dotenv::dotenv;
-use erc20::TokenStore;
+use erc20::TokenClient;
 use std::{env, sync::Arc};
 
 #[tokio::test]
-async fn test_token_store() {
+async fn test_retrieve_token() {
     dotenv().ok();
     let eth_rpc = env::var("ETH_RPC").unwrap();
 
@@ -15,12 +15,10 @@ async fn test_token_store() {
             .reqwest_http(eth_rpc.parse().unwrap())
             .boxed(),
     );
-    let token_store = TokenStore::new(1, Arc::new(provider));
+    let token_client = TokenClient::new(Arc::new(provider));
 
-    let dai = token_store
-        .get(erc20::TokenId::Address(address!(
-            "6B175474E89094C44Da98b954EedeAC495271d0F"
-        )))
+    let dai = token_client
+        .retrieve_token(address!("6B175474E89094C44Da98b954EedeAC495271d0F"))
         .await
         .unwrap();
 
