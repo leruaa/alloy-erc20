@@ -5,24 +5,26 @@ use std::{
     task::{Context, Poll},
 };
 
-use alloy_providers::provider::Provider;
-use alloy_transport::BoxTransport;
 use tower::Service;
 
-use crate::{error::InternalError, Error, Token, TokenClient, TokenId, TokenStore};
+use crate::{error::InternalError, stores::TokenStore, Error, Token, TokenClient, TokenId};
 
 pub struct TokenService {
     chain_id: u8,
     client: Arc<TokenClient>,
-    store: Arc<TokenStore>,
+    store: Box<Arc<dyn TokenStore + Send + Sync>>,
 }
 
 impl TokenService {
-    pub fn new(provider: Arc<Provider<BoxTransport>>, chain_id: u8) -> Self {
+    pub fn new(
+        chain_id: u8,
+        client: Arc<TokenClient>,
+        store: Arc<dyn TokenStore + Send + Sync>,
+    ) -> Self {
         Self {
             chain_id,
-            client: Arc::new(TokenClient::new(provider)),
-            store: Arc::new(TokenStore::new()),
+            client,
+            store: Box::new(store),
         }
     }
 }
