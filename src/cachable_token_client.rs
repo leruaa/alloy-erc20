@@ -2,21 +2,27 @@ use std::sync::Arc;
 
 use parking_lot::RwLock;
 
-use crate::{error::InternalError, stores::TokenStore, Error, Token, TokenClient, TokenId};
+use crate::{
+    error::InternalError,
+    stores::{BasicTokenStore, TokenStore},
+    Error, Token, TokenClient, TokenId,
+};
 
-pub struct CachableTokenClient {
+pub struct CachableTokenClient<S = BasicTokenStore> {
     inner: TokenClient,
-    store: RwLock<Box<dyn TokenStore>>,
+    store: RwLock<S>,
 }
 
-impl CachableTokenClient {
-    pub fn new<S: TokenStore + 'static>(inner: TokenClient, store: S) -> Self {
+impl<S> CachableTokenClient<S> {
+    pub fn new(inner: TokenClient, store: S) -> Self {
         Self {
             inner,
-            store: RwLock::new(Box::new(store)),
+            store: RwLock::new(store),
         }
     }
+}
 
+impl<S: TokenStore> CachableTokenClient<S> {
     pub async fn retrieve_token(&self, chain_id: u8, id: TokenId) -> Result<Arc<Token>, Error> {
         if let Some(token) = self.store.read().get(chain_id, id.clone()) {
             return Ok(token);
