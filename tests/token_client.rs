@@ -2,7 +2,7 @@ use alloy_primitives::address;
 use alloy_providers::provider::Provider;
 use alloy_rpc_client::RpcClient;
 use dotenv::dotenv;
-use erc20::TokenClient;
+use erc20::clients::TokenClient;
 use std::{env, sync::Arc};
 
 #[tokio::test]

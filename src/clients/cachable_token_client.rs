@@ -5,8 +5,10 @@ use parking_lot::RwLock;
 use crate::{
     error::InternalError,
     stores::{BasicTokenStore, TokenStore},
-    Error, Token, TokenClient, TokenId,
+    Error, Token, TokenId,
 };
+
+use super::TokenClient;
 
 pub struct CachableTokenClient<S = BasicTokenStore> {
     inner: TokenClient,
