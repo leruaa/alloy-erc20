@@ -21,7 +21,7 @@ impl TokenClient {
         let symbol = self.symbol(address).await?;
         let decimals = self.decimals(address).await?;
 
-        let token = Token::new(address, &symbol, decimals);
+        let token = Token::new(address, symbol, decimals);
 
         Ok(token)
     }

@@ -22,7 +22,7 @@ impl TokenStore for BasicTokenStore {
         self.tokens
             .insert((chain_id, TokenId::Address(token.address)), token.clone());
         self.tokens
-            .insert((chain_id, TokenId::Symbol(token.symbol.clone())), token);
+            .insert((chain_id, TokenId::Symbol(token.symbol.to_string())), token);
     }
 
     fn contains(&self, chain_id: u8, id: TokenId) -> bool {

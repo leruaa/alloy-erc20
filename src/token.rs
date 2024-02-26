@@ -13,10 +13,10 @@ pub struct Token {
 }
 
 impl Token {
-    pub fn new(address: Address, symbol: &str, decimals: u8) -> Self {
+    pub const fn new(address: Address, symbol: String, decimals: u8) -> Self {
         Self {
             address,
-            symbol: String::from(symbol),
+            symbol,
             decimals,
         }
     }
