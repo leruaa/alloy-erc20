@@ -10,21 +10,23 @@ use crate::{
 
 pub struct CachableTokenClient<S = BasicTokenStore> {
     inner: TokenClient,
+    chain_id: u8,
     store: RwLock<S>,
 }
 
 impl<S> CachableTokenClient<S> {
-    pub fn new(inner: TokenClient, store: S) -> Self {
+    pub fn new(inner: TokenClient, chain_id: u8, store: S) -> Self {
         Self {
             inner,
+            chain_id,
             store: RwLock::new(store),
         }
     }
 }
 
 impl<S: TokenStore> CachableTokenClient<S> {
-    pub async fn retrieve_token(&self, chain_id: u8, id: TokenId) -> Result<Arc<Token>, Error> {
-        if let Some(token) = self.store.read().get(chain_id, id.clone()) {
+    pub async fn retrieve_token(&self, id: TokenId) -> Result<Arc<Token>, Error> {
+        if let Some(token) = self.store.read().get(self.chain_id, id.clone()) {
             return Ok(token);
         }
 
@@ -33,7 +35,7 @@ impl<S: TokenStore> CachableTokenClient<S> {
             TokenId::Address(a) => match self.inner.retrieve_token(a).await {
                 Ok(token) => {
                     let token = Arc::new(token);
-                    self.store.write().insert(chain_id, token.clone());
+                    self.store.write().insert(self.chain_id, token.clone());
                     Ok(token)
                 }
                 Err(err) => Err(err),
