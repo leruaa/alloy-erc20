@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use alloy_primitives::Address;
 use alloy_providers::provider::{Provider, TempProvider};
-use alloy_rpc_types::{CallInput, CallRequest};
+use alloy_rpc_types::request::{TransactionInput, TransactionRequest};
 use alloy_sol_types::SolCall;
 use alloy_transport::BoxTransport;
 
@@ -27,9 +27,9 @@ impl TokenClient {
     }
 
     async fn symbol(&self, address: Address) -> Result<String, Error> {
-        let tx = CallRequest {
+        let tx = TransactionRequest {
             to: Some(address),
-            input: CallInput::new(ERC20Contract::symbolCall::new(()).abi_encode().into()),
+            input: TransactionInput::new(ERC20Contract::symbolCall::new(()).abi_encode().into()),
             ..Default::default()
         };
 
@@ -45,9 +45,9 @@ impl TokenClient {
     }
 
     async fn decimals(&self, address: Address) -> Result<u8, Error> {
-        let tx = CallRequest {
+        let tx = TransactionRequest {
             to: Some(address),
-            input: CallInput::new(ERC20Contract::decimalsCall::new(()).abi_encode().into()),
+            input: TransactionInput::new(ERC20Contract::decimalsCall::new(()).abi_encode().into()),
             ..Default::default()
         };
 
