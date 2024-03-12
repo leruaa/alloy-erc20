@@ -1,5 +1,7 @@
 use std::sync::Arc;
 
+use alloy_network::Network;
+use alloy_transport::Transport;
 use parking_lot::RwLock;
 
 use crate::{
@@ -10,14 +12,14 @@ use crate::{
 
 use super::TokenClient;
 
-pub struct CachableTokenClient<S = BasicTokenStore> {
-    inner: TokenClient,
+pub struct CachableTokenClient<N, T, S = BasicTokenStore> {
+    inner: TokenClient<N, T>,
     chain_id: u8,
     store: RwLock<S>,
 }
 
-impl<S> CachableTokenClient<S> {
-    pub fn new(inner: TokenClient, chain_id: u8, store: S) -> Self {
+impl<N, T, S> CachableTokenClient<N, T, S> {
+    pub fn new(inner: TokenClient<N, T>, chain_id: u8, store: S) -> Self {
         Self {
             inner,
             chain_id,
@@ -26,7 +28,12 @@ impl<S> CachableTokenClient<S> {
     }
 }
 
-impl<S: TokenStore> CachableTokenClient<S> {
+impl<N, T, S> CachableTokenClient<N, T, S>
+where
+    N: Network,
+    T: Transport + Clone,
+    S: TokenStore,
+{
     pub async fn retrieve_token(&self, id: TokenId) -> Result<Arc<Token>, Error> {
         if let Some(token) = self.store.read().get(self.chain_id, id.clone()) {
             return Ok(token);

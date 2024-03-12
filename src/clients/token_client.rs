@@ -1,19 +1,25 @@
 use std::sync::Arc;
 
+use alloy_network::{Network, TransactionBuilder};
 use alloy_primitives::Address;
-use alloy_providers::provider::{Provider, TempProvider};
-use alloy_rpc_types::request::{TransactionInput, TransactionRequest};
+use alloy_provider::{Provider, RootProvider};
 use alloy_sol_types::SolCall;
-use alloy_transport::BoxTransport;
+use alloy_transport::Transport;
 
 use crate::{ERC20Contract, Error, Token, TokenId};
 
-pub struct TokenClient {
-    provider: Arc<Provider<BoxTransport>>,
+pub struct TokenClient<N, T> {
+    provider: Arc<RootProvider<N, T>>,
 }
 
-impl TokenClient {
-    pub fn new(provider: Arc<Provider<BoxTransport>>) -> Self {
+/// A client for quering ERC20 [`Token`] from the blockchain.
+impl<N, T> TokenClient<N, T>
+where
+    N: Network,
+    T: Transport + Clone,
+{
+    /// Create a new [`TokenClient`] with the given provider.
+    pub fn new(provider: Arc<RootProvider<N, T>>) -> Self {
         Self { provider }
     }
 
@@ -27,15 +33,13 @@ impl TokenClient {
     }
 
     async fn symbol(&self, address: Address) -> Result<String, Error> {
-        let tx = TransactionRequest {
-            to: Some(address),
-            input: TransactionInput::new(ERC20Contract::symbolCall::new(()).abi_encode().into()),
-            ..Default::default()
-        };
+        let tx = N::TransactionRequest::default()
+            .with_to(address.into())
+            .with_input(ERC20Contract::symbolCall::new(()).abi_encode().into());
 
         let result = self
             .provider
-            .call(tx, None)
+            .call(&tx, None)
             .await
             .map_err(|err| Error::new(TokenId::Address(address), err))?;
         let decoded = ERC20Contract::symbolCall::abi_decode_returns(&result, true)
@@ -45,15 +49,13 @@ impl TokenClient {
     }
 
     async fn decimals(&self, address: Address) -> Result<u8, Error> {
-        let tx = TransactionRequest {
-            to: Some(address),
-            input: TransactionInput::new(ERC20Contract::decimalsCall::new(()).abi_encode().into()),
-            ..Default::default()
-        };
+        let tx = N::TransactionRequest::default()
+            .with_to(address.into())
+            .with_input(ERC20Contract::decimalsCall::new(()).abi_encode().into());
 
         let result = self
             .provider
-            .call(tx, None)
+            .call(&tx, None)
             .await
             .map_err(|err| Error::new(TokenId::Address(address), err))?;
         let decoded = ERC20Contract::decimalsCall::abi_decode_returns(&result, true)
