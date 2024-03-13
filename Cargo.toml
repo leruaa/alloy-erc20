@@ -11,12 +11,12 @@ known-tokens = []
 [dependencies]
 alloy-primitives = "0.6"
 alloy-sol-types = { version = "0.6", features = ["json"] }
-alloy-network = { git = "https://github.com/alloy-rs/alloy", rev = "b7eb33d" }
-alloy-provider = { git = "https://github.com/alloy-rs/alloy", rev = "b7eb33d" }
-alloy-rpc-client = { git = "https://github.com/alloy-rs/alloy", rev = "b7eb33d" }
-alloy-rpc-types = { git = "https://github.com/alloy-rs/alloy", rev = "b7eb33d" }
-alloy-transport = { git = "https://github.com/alloy-rs/alloy", rev = "b7eb33d" }
-alloy-transport-http = { git = "https://github.com/alloy-rs/alloy", rev = "b7eb33d" }
+alloy-network = { git = "https://github.com/alloy-rs/alloy" }
+alloy-provider = { git = "https://github.com/alloy-rs/alloy" }
+alloy-rpc-client = { git = "https://github.com/alloy-rs/alloy" }
+alloy-rpc-types = { git = "https://github.com/alloy-rs/alloy" }
+alloy-transport = { git = "https://github.com/alloy-rs/alloy" }
+alloy-transport-http = { git = "https://github.com/alloy-rs/alloy" }
 tokio = { version = "1", features = ["full"] }
 bigdecimal = "0.4"
 thiserror = "1.0"
