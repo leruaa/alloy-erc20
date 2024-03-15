@@ -12,10 +12,11 @@ use crate::{
 
 use super::TokenClient;
 
+#[derive(Debug, Clone)]
 pub struct CachableTokenClient<N, T, S = BasicTokenStore> {
     inner: TokenClient<N, T>,
     chain_id: u8,
-    store: RwLock<S>,
+    store: Arc<RwLock<S>>,
 }
 
 impl<N, T, S> CachableTokenClient<N, T, S> {
@@ -23,7 +24,7 @@ impl<N, T, S> CachableTokenClient<N, T, S> {
         Self {
             inner,
             chain_id,
-            store: RwLock::new(store),
+            store: Arc::new(RwLock::new(store)),
         }
     }
 }

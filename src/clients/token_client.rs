@@ -8,6 +8,7 @@ use alloy_transport::Transport;
 
 use crate::{ERC20Contract, Error, Token, TokenId};
 
+#[derive(Debug, Clone)]
 pub struct TokenClient<N, T> {
     provider: Arc<RootProvider<N, T>>,
 }
