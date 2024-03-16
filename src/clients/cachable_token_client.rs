@@ -4,7 +4,7 @@ use alloy_network::Network;
 use alloy_primitives::Address;
 use alloy_transport::Transport;
 use bigdecimal::BigDecimal;
-use parking_lot::RwLock;
+use parking_lot::{RwLock, RwLockReadGuard};
 
 use crate::{
     error::InternalError,
@@ -62,5 +62,9 @@ where
         let balance = token.get_balance(amount);
 
         Ok(balance)
+    }
+
+    pub fn store(&self) -> RwLockReadGuard<S> {
+        self.store.read()
     }
 }
