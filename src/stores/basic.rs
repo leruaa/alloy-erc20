@@ -4,7 +4,7 @@ use crate::{token_id::TokenId, Token};
 
 use super::TokenStore;
 
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Clone)]
 pub struct BasicTokenStore {
     tokens: HashMap<(u8, TokenId), Arc<Token>>,
 }
