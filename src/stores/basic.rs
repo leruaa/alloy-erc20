@@ -32,4 +32,19 @@ impl TokenStore for BasicTokenStore {
     fn get(&self, chain_id: u8, id: TokenId) -> Option<Arc<Token>> {
         self.tokens.get(&(chain_id, id.clone())).cloned()
     }
+
+    fn iter(&self, chain_id: Option<u8>) -> impl Iterator<Item = &Token> {
+        self.tokens
+            .iter()
+            .filter_map(move |((token_chain_id, _), token)| match chain_id {
+                Some(chain_id) => {
+                    if token_chain_id == &chain_id {
+                        Some(token.as_ref())
+                    } else {
+                        None
+                    }
+                }
+                None => Some(token.as_ref()),
+            })
+    }
 }

@@ -10,6 +10,7 @@ pub trait TokenStore {
     fn insert(&mut self, chain_id: u8, token: Arc<Token>);
     fn contains(&self, chain_id: u8, id: TokenId) -> bool;
     fn get(&self, chain_id: u8, id: TokenId) -> Option<Arc<Token>>;
+    fn iter(&self, chain_id: Option<u8>) -> impl Iterator<Item = &Token>;
 
     #[cfg(feature = "known-tokens")]
     fn insert_known_tokens(&mut self, chain_id: u8) {
