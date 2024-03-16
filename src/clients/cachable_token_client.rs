@@ -1,7 +1,9 @@
 use std::sync::Arc;
 
 use alloy_network::Network;
+use alloy_primitives::Address;
 use alloy_transport::Transport;
+use bigdecimal::BigDecimal;
 use parking_lot::RwLock;
 
 use crate::{
@@ -51,5 +53,14 @@ where
                 Err(err) => Err(err),
             },
         }
+    }
+
+    pub async fn balance_of(&self, token: Address, address: Address) -> Result<BigDecimal, Error> {
+        let amount = self.inner.balance_of(token, address).await?;
+        let token = self.retrieve_token(TokenId::Address(token)).await?;
+
+        let balance = token.get_balance(amount);
+
+        Ok(balance)
     }
 }

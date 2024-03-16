@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use alloy_network::{Network, TransactionBuilder};
-use alloy_primitives::Address;
+use alloy_primitives::{Address, U256};
 use alloy_provider::{Provider, RootProvider};
 use alloy_sol_types::SolCall;
 use alloy_transport::Transport;
@@ -31,6 +31,27 @@ where
         let token = Token::new(address, symbol, decimals);
 
         Ok(token)
+    }
+
+    pub async fn balance_of(&self, token: Address, address: Address) -> Result<U256, Error> {
+        let tx = N::TransactionRequest::default()
+            .with_to(token.into())
+            .with_input(
+                ERC20Contract::balanceOfCall::new((address,))
+                    .abi_encode()
+                    .into(),
+            );
+
+        let result = self
+            .provider
+            .call(&tx, None)
+            .await
+            .map_err(|err| Error::new(TokenId::Address(address), err))?;
+
+        let decoded = ERC20Contract::balanceOfCall::abi_decode_returns(&result, true)
+            .map_err(|err| Error::new(TokenId::Address(address), err))?;
+
+        Ok(decoded.balance)
     }
 
     async fn symbol(&self, address: Address) -> Result<String, Error> {
