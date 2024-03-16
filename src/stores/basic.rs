@@ -36,15 +36,12 @@ impl TokenStore for BasicTokenStore {
     fn iter(&self, chain_id: Option<u8>) -> impl Iterator<Item = &Token> {
         self.tokens
             .iter()
-            .filter_map(move |((token_chain_id, _), token)| match chain_id {
-                Some(chain_id) => {
-                    if token_chain_id == &chain_id {
-                        Some(token.as_ref())
-                    } else {
-                        None
-                    }
+            .filter_map(move |((token_chain_id, id), token)| match (id, chain_id) {
+                (TokenId::Address(_), Some(chain_id)) if token_chain_id == &chain_id => {
+                    Some(token.as_ref())
                 }
-                None => Some(token.as_ref()),
+                (TokenId::Address(_), None) => Some(token.as_ref()),
+                _ => None,
             })
     }
 }
