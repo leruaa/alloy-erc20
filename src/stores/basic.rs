@@ -1,5 +1,7 @@
 use std::{collections::HashMap, sync::Arc};
 
+use alloy_primitives::Address;
+
 use crate::{token_id::TokenId, Token};
 
 use super::TokenStore;
@@ -33,14 +35,24 @@ impl TokenStore for BasicTokenStore {
         self.tokens.get(&(chain_id, id.clone())).cloned()
     }
 
-    fn iter(&self, chain_id: Option<u8>) -> impl Iterator<Item = &Token> {
+    fn symbols(&self, chain_id: Option<u8>) -> impl Iterator<Item = String> {
         self.tokens
-            .iter()
-            .filter_map(move |((token_chain_id, id), token)| match (id, chain_id) {
-                (TokenId::Address(_), Some(chain_id)) if token_chain_id == &chain_id => {
-                    Some(token.as_ref())
+            .keys()
+            .filter_map(move |(token_chain_id, id)| match (id, chain_id) {
+                (TokenId::Symbol(id), Some(chain_id)) if token_chain_id == &chain_id => {
+                    Some(id.clone())
                 }
-                (TokenId::Address(_), None) => Some(token.as_ref()),
+                (TokenId::Symbol(id), None) => Some(id.clone()),
+                _ => None,
+            })
+    }
+
+    fn addresses(&self, chain_id: Option<u8>) -> impl Iterator<Item = Address> {
+        self.tokens
+            .keys()
+            .filter_map(move |(token_chain_id, id)| match (id, chain_id) {
+                (TokenId::Address(id), Some(chain_id)) if token_chain_id == &chain_id => Some(*id),
+                (TokenId::Address(id), None) => Some(*id),
                 _ => None,
             })
     }

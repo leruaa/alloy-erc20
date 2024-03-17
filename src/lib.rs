@@ -7,6 +7,7 @@ mod token_id;
 
 pub mod clients;
 pub mod stores;
+pub mod util;
 
 pub use constants::*;
 pub use error::Error;

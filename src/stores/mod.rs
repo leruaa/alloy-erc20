@@ -1,16 +1,22 @@
 use std::sync::Arc;
 
-use crate::{Token, TokenId};
+use crate::{util::StoreIter, Token, TokenId};
 
 mod basic;
 
+use alloy_primitives::Address;
 pub use basic::BasicTokenStore;
 
-pub trait TokenStore {
+pub trait TokenStore: Sized {
     fn insert(&mut self, chain_id: u8, token: Arc<Token>);
     fn contains(&self, chain_id: u8, id: TokenId) -> bool;
     fn get(&self, chain_id: u8, id: TokenId) -> Option<Arc<Token>>;
-    fn iter(&self, chain_id: Option<u8>) -> impl Iterator<Item = &Token>;
+    fn symbols(&self, chain_id: Option<u8>) -> impl Iterator<Item = String>;
+    fn addresses(&self, chain_id: Option<u8>) -> impl Iterator<Item = Address>;
+
+    fn iter(&self, chain_id: u8) -> StoreIter<Self> {
+        StoreIter::new(self, chain_id)
+    }
 
     #[cfg(feature = "known-tokens")]
     fn insert_known_tokens(&mut self, chain_id: u8) {

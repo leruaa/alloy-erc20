@@ -4,11 +4,12 @@ use alloy_network::Network;
 use alloy_primitives::Address;
 use alloy_transport::Transport;
 use bigdecimal::BigDecimal;
-use parking_lot::{RwLock, RwLockReadGuard};
+use parking_lot::RwLock;
 
 use crate::{
     error::InternalError,
     stores::{BasicTokenStore, TokenStore},
+    util::StoreIter,
     Error, Token, TokenId,
 };
 
@@ -64,7 +65,7 @@ where
         Ok(balance)
     }
 
-    pub fn store(&self) -> RwLockReadGuard<S> {
-        self.store.read()
+    pub fn iter(&self) -> StoreIter<RwLock<S>> {
+        StoreIter::from_lock(self.store.as_ref(), self.chain_id)
     }
 }
