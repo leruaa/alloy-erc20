@@ -1,8 +1,7 @@
 use std::sync::Arc;
 
-use alloy_network::Network;
+use alloy::{network::Network, transports::Transport};
 use alloy_primitives::Address;
-use alloy_transport::Transport;
 use bigdecimal::BigDecimal;
 use parking_lot::RwLock;
 

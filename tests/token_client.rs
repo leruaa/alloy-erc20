@@ -1,7 +1,5 @@
-use alloy_network::Ethereum;
+use alloy::{network::Ethereum, providers::ProviderBuilder, rpc::client::RpcClient};
 use alloy_primitives::address;
-use alloy_provider::ProviderBuilder;
-use alloy_rpc_client::RpcClient;
 use dotenv::dotenv;
 use erc20::clients::TokenClient;
 use std::{env, sync::Arc};

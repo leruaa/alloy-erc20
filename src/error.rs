@@ -30,7 +30,7 @@ pub enum InternalError {
     #[error("The token is not present in store")]
     NotInStore,
     #[error("Failed to query token: {0}")]
-    Transport(#[from] alloy_transport::TransportError),
+    Transport(#[from] alloy::transports::TransportError),
     #[error("Failed to decode token: {0}")]
     Sol(#[from] alloy_sol_types::Error),
 }

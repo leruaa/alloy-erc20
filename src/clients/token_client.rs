@@ -1,10 +1,8 @@
 use std::sync::Arc;
 
-use alloy_network::{Network, TransactionBuilder};
+use alloy::{network::{Network, TransactionBuilder}, providers::{Provider, RootProvider}, transports::Transport};
 use alloy_primitives::{Address, U256};
-use alloy_provider::{Provider, RootProvider};
 use alloy_sol_types::SolCall;
-use alloy_transport::Transport;
 
 use crate::{ERC20Contract, Error, Token, TokenId};
 
