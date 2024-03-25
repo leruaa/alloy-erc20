@@ -31,6 +31,8 @@ pub enum InternalError {
     NotInStore,
     #[error("Failed to query token: {0}")]
     Transport(#[from] alloy::transports::TransportError),
+    #[error("Contract error: {0}")]
+    Contract(#[from] alloy::contract::Error),
     #[error("Failed to decode token: {0}")]
     Sol(#[from] alloy_sol_types::Error),
 }

@@ -1,17 +1,26 @@
 use alloy_sol_types::sol;
 
 mod constants;
-mod error;
-mod token;
-mod token_id;
+pub use constants::*;
 
-pub mod clients;
+mod provider;
+pub use provider::Erc20Provider;
+
+mod error;
+pub use error::Error;
+
+mod token;
+pub use token::Token;
+
+mod token_id;
+pub use token_id::TokenId;
+
 pub mod stores;
 pub mod util;
 
-pub use constants::*;
-pub use error::Error;
-pub use token::Token;
-pub use token_id::TokenId;
-
-sol!(ERC20Contract, "abi/erc20.json");
+sol!(
+    #[sol(rpc)]
+    #[sol(alloy_contract = alloy::contract)]
+    Erc20Contract,
+    "abi/erc20.json"
+);

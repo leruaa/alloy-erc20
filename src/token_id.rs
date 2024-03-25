@@ -19,3 +19,9 @@ impl Display for TokenId {
         }
     }
 }
+
+impl From<Address> for TokenId {
+    fn from(value: Address) -> Self {
+        TokenId::Address(value)
+    }
+}

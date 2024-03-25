@@ -7,9 +7,15 @@ mod basic;
 use alloy_primitives::Address;
 pub use basic::BasicTokenStore;
 
+/// A [`Token`] store
 pub trait TokenStore: Sized {
+    /// Inserts a token into the store.
     fn insert(&mut self, chain_id: u8, token: Arc<Token>);
+
+    /// Returns `true` if the store contains a value for the specified `id`.
     fn contains(&self, chain_id: u8, id: TokenId) -> bool;
+
+    /// Returns the value corresponding to the given id.
     fn get(&self, chain_id: u8, id: TokenId) -> Option<Arc<Token>>;
     fn symbols(&self, chain_id: Option<u8>) -> impl Iterator<Item = String>;
     fn addresses(&self, chain_id: Option<u8>) -> impl Iterator<Item = Address>;
