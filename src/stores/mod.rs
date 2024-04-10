@@ -34,6 +34,11 @@ pub trait TokenStore: Sized {
             self.insert(chain_id, Arc::new(mainnet::USDC.to_owned()));
             self.insert(chain_id, Arc::new(mainnet::USDT.to_owned()));
             self.insert(chain_id, Arc::new(mainnet::DAI.to_owned()));
+        } else if chain_id = 42161 {
+            // Arbitrum
+            self.insert(chain_id, Arc::new(arbitrum::WETH.to_owned()));
+            self.insert(chain_id, Arc::new(arbitrum::USDC.to_owned()));
+            self.insert(chain_id, Arc::new(arbitrum::USDT.to_owned()));
         }
     }
 }
