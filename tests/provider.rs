@@ -1,5 +1,5 @@
+use alloy::primitives::address;
 use alloy::providers::ProviderBuilder;
-use alloy_primitives::address;
 use dotenv::dotenv;
 use erc20::Erc20Provider;
 use std::{env, sync::Arc};

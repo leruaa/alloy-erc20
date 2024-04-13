@@ -4,7 +4,7 @@ use crate::{util::StoreIter, Token, TokenId};
 
 mod basic;
 
-use alloy_primitives::Address;
+use alloy::primitives::Address;
 pub use basic::BasicTokenStore;
 
 /// A [`Token`] store

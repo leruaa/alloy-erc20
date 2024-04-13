@@ -1,4 +1,4 @@
-use alloy_primitives::{Address, U256};
+use alloy::primitives::{Address, U256};
 use bigdecimal::{
     num_bigint::{BigInt, Sign},
     BigDecimal,

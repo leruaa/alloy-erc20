@@ -3,7 +3,7 @@ use std::{
     hash::Hash,
 };
 
-use alloy_primitives::Address;
+use alloy::primitives::Address;
 
 #[derive(Clone, Debug, Eq, Hash, PartialEq)]
 pub enum TokenId {

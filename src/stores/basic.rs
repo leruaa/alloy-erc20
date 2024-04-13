@@ -1,6 +1,6 @@
 use std::{collections::HashMap, sync::Arc};
 
-use alloy_primitives::Address;
+use alloy::primitives::Address;
 
 use crate::{token_id::TokenId, Token};
 

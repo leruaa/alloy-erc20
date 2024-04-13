@@ -9,7 +9,6 @@ edition = "2021"
 known-tokens = []
 
 [dependencies]
-alloy-primitives = "0.7"
 alloy = { git = "https://github.com/alloy-rs/alloy", features = [
     "network",
     "providers",

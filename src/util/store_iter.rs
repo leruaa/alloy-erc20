@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use alloy_primitives::Address;
+use alloy::primitives::Address;
 use parking_lot::RwLock;
 
 use crate::{stores::TokenStore, Token, TokenId};

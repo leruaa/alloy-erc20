@@ -1,7 +1,7 @@
 use std::{fmt::Debug, marker::PhantomData, sync::Arc};
 
+use alloy::primitives::Address;
 use alloy::{network::Network, providers::Provider, transports::Transport};
-use alloy_primitives::Address;
 use bigdecimal::BigDecimal;
 use parking_lot::RwLock;
 

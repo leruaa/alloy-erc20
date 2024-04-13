@@ -1,4 +1,4 @@
-use alloy_primitives::address;
+use alloy::primitives::address;
 use once_cell::sync::Lazy;
 
 use crate::Token;
