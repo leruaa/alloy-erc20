@@ -9,8 +9,7 @@ edition = "2021"
 known-tokens = []
 
 [dependencies]
-alloy-primitives = "0.6"
-alloy-sol-types = { version = "0.6", features = ["json"] }
+alloy-primitives = "0.7"
 alloy = { git = "https://github.com/alloy-rs/alloy", features = [
     "network",
     "providers",
@@ -20,6 +19,7 @@ alloy = { git = "https://github.com/alloy-rs/alloy", features = [
     "rpc-types",
     "rpc-client",
     "contract",
+    "sol-types",
 ] }
 tokio = { version = "1", features = ["full"] }
 bigdecimal = "0.4"
@@ -30,14 +30,5 @@ parking_lot = "0.12"
 
 [dev-dependencies]
 tokio = { version = "1", features = ["rt", "macros"] }
-reqwest = "0.11"
+reqwest = "0.12"
 dotenv = "0.15"
-
-[patch.crates-io]
-alloy-sol-macro = { git = "https://github.com/alloy-rs/core", rev = "1bac7678797fcd1bee2f2580825724b4165b12c1" }
-alloy-primitives = { git = "https://github.com/alloy-rs/core", rev = "1bac7678797fcd1bee2f2580825724b4165b12c1" }
-alloy-sol-types = { git = "https://github.com/alloy-rs/core", rev = "1bac7678797fcd1bee2f2580825724b4165b12c1" }
-alloy-json-abi = { git = "https://github.com/alloy-rs/core", rev = "1bac7678797fcd1bee2f2580825724b4165b12c1" }
-alloy-dyn-abi = { git = "https://github.com/alloy-rs/core", rev = "1bac7678797fcd1bee2f2580825724b4165b12c1" }
-syn-solidity = { git = "https://github.com/alloy-rs/core", rev = "1bac7678797fcd1bee2f2580825724b4165b12c1" }
-alloy-core = { git = "https://github.com/alloy-rs/core", rev = "1bac7678797fcd1bee2f2580825724b4165b12c1" }

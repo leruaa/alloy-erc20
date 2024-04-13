@@ -1,4 +1,4 @@
-use alloy_sol_types::sol;
+use alloy::sol;
 
 mod constants;
 pub use constants::*;
@@ -20,7 +20,6 @@ pub mod util;
 
 sol!(
     #[sol(rpc)]
-    #[sol(alloy_contract = alloy::contract)]
     Erc20Contract,
     "abi/erc20.json"
 );

@@ -45,9 +45,9 @@ impl<P, N, T, S> Erc20Provider<P, N, T, S> {
 
 impl<P, N, T, S> Erc20Provider<P, N, T, S>
 where
-    P: Provider<N, T>,
-    N: Network,
+    P: Provider<T, N>,
     T: Transport + Clone,
+    N: Network,
     S: TokenStore,
 {
     pub async fn retrieve_token(&self, id: TokenId) -> Result<Arc<Token>, Error> {

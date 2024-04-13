@@ -34,5 +34,5 @@ pub enum InternalError {
     #[error("Contract error: {0}")]
     Contract(#[from] alloy::contract::Error),
     #[error("Failed to decode token: {0}")]
-    Sol(#[from] alloy_sol_types::Error),
+    Sol(#[from] alloy::sol_types::Error),
 }

@@ -1,4 +1,4 @@
-use alloy::{network::Ethereum, providers::ProviderBuilder, rpc::client::RpcClient};
+use alloy::providers::ProviderBuilder;
 use alloy_primitives::address;
 use dotenv::dotenv;
 use erc20::Erc20Provider;
@@ -8,8 +8,9 @@ use std::{env, sync::Arc};
 async fn test_retrieve_token() {
     dotenv().ok();
     let eth_rpc = env::var("ETH_RPC").unwrap();
-    let rpc_client = RpcClient::builder().reqwest_http(eth_rpc.parse().unwrap());
-    let provider = ProviderBuilder::<_, Ethereum>::new().on_client(rpc_client);
+    let provider = ProviderBuilder::new()
+        .on_http(eth_rpc.parse().unwrap())
+        .unwrap();
     let erc_provider = Erc20Provider::new(Arc::new(provider), 1);
 
     let dai = erc_provider
