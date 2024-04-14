@@ -1,4 +1,4 @@
-use std::{collections::HashMap, sync::Arc};
+use std::collections::{hash_map::Entry, HashMap};
 
 use alloy::primitives::Address;
 
@@ -8,7 +8,7 @@ use super::TokenStore;
 
 #[derive(Debug, Default, Clone)]
 pub struct BasicTokenStore {
-    tokens: HashMap<(u8, TokenId), Arc<Token>>,
+    tokens: HashMap<(u8, TokenId), Token>,
 }
 
 impl BasicTokenStore {
@@ -20,7 +20,7 @@ impl BasicTokenStore {
 }
 
 impl TokenStore for BasicTokenStore {
-    fn insert(&mut self, chain_id: u8, token: Arc<Token>) {
+    fn insert(&mut self, chain_id: u8, token: Token) {
         self.tokens
             .insert((chain_id, TokenId::Address(token.address)), token.clone());
         self.tokens
@@ -31,8 +31,8 @@ impl TokenStore for BasicTokenStore {
         self.tokens.contains_key(&(chain_id, id))
     }
 
-    fn get(&self, chain_id: u8, id: TokenId) -> Option<Arc<Token>> {
-        self.tokens.get(&(chain_id, id.clone())).cloned()
+    fn get(&self, chain_id: u8, id: TokenId) -> Option<&Token> {
+        self.tokens.get(&(chain_id, id.clone()))
     }
 
     fn symbols(&self, chain_id: Option<u8>) -> impl Iterator<Item = String> {
@@ -55,5 +55,9 @@ impl TokenStore for BasicTokenStore {
                 (TokenId::Address(id), None) => Some(*id),
                 _ => None,
             })
+    }
+
+    fn entry(&mut self, chain_id: u8, id: TokenId) -> Entry<(u8, TokenId), Token> {
+        self.tokens.entry((chain_id, id))
     }
 }

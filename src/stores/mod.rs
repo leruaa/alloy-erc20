@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::collections::hash_map::Entry;
 
 use crate::{util::StoreIter, Token, TokenId};
 
@@ -10,15 +10,16 @@ pub use basic::BasicTokenStore;
 /// A [`Token`] store
 pub trait TokenStore: Sized {
     /// Inserts a token into the store.
-    fn insert(&mut self, chain_id: u8, token: Arc<Token>);
+    fn insert(&mut self, chain_id: u8, token: Token);
 
     /// Returns `true` if the store contains a value for the specified `id`.
     fn contains(&self, chain_id: u8, id: TokenId) -> bool;
 
     /// Returns the value corresponding to the given id.
-    fn get(&self, chain_id: u8, id: TokenId) -> Option<Arc<Token>>;
+    fn get(&self, chain_id: u8, id: TokenId) -> Option<&Token>;
     fn symbols(&self, chain_id: Option<u8>) -> impl Iterator<Item = String>;
     fn addresses(&self, chain_id: Option<u8>) -> impl Iterator<Item = Address>;
+    fn entry(&mut self, chain_id: u8, id: TokenId) -> Entry<(u8, TokenId), Token>;
 
     fn iter(&self, chain_id: u8) -> StoreIter<Self> {
         StoreIter::new(self, chain_id)

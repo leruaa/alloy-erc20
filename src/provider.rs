@@ -1,89 +1,65 @@
-use std::{fmt::Debug, marker::PhantomData, sync::Arc};
+use std::collections::hash_map::Entry;
 
 use alloy::primitives::Address;
 use alloy::{network::Network, providers::Provider, transports::Transport};
+use async_trait::async_trait;
 use bigdecimal::BigDecimal;
-use parking_lot::RwLock;
 
 use crate::{
-    error::InternalError,
-    stores::{BasicTokenStore, TokenStore},
-    util::StoreIter,
-    Erc20Contract::Erc20ContractInstance,
-    Error, Token, TokenId,
+    error::InternalError, stores::TokenStore, Erc20Contract::Erc20ContractInstance, Error, Token,
+    TokenId,
 };
 
-#[derive(Debug, Clone)]
-pub struct Erc20Provider<P, N, T, S> {
-    provider: P,
-    chain_id: u8,
-    store: Arc<RwLock<S>>,
-    phantom: PhantomData<(N, T)>,
-}
-
-impl<P, N, T> Erc20Provider<P, N, T, BasicTokenStore> {
-    pub fn new(provider: P, chain_id: u8) -> Self {
-        Self {
-            provider,
-            chain_id,
-            store: Arc::new(RwLock::new(BasicTokenStore::new())),
-            phantom: PhantomData,
-        }
-    }
-}
-
-impl<P, N, T, S> Erc20Provider<P, N, T, S> {
-    pub fn with_store(provider: P, chain_id: u8, store: S) -> Self {
-        Self {
-            provider,
-            chain_id,
-            store: Arc::new(RwLock::new(store)),
-            phantom: PhantomData,
-        }
-    }
-}
-
-impl<P, N, T, S> Erc20Provider<P, N, T, S>
+#[async_trait]
+pub trait Erc20ProviderExt<T, N>: Provider<T, N> + Sized
 where
-    P: Provider<T, N>,
     T: Transport + Clone,
     N: Network,
-    S: TokenStore,
 {
-    pub async fn retrieve_token(&self, id: TokenId) -> Result<Arc<Token>, Error> {
-        if let Some(token) = self.store.read().get(self.chain_id, id.clone()) {
-            return Ok(token);
-        }
+    async fn retrieve_token(&self, address: Address) -> Result<Token, Error> {
+        let instance = Erc20ContractInstance::new(address, self);
 
-        match id {
-            TokenId::Symbol(_) => Err(Error::new(id, InternalError::NotInStore)),
-            TokenId::Address(a) => {
-                let instance = Erc20ContractInstance::new(a, &self.provider);
+        let symbol = instance
+            .symbol()
+            .call()
+            .await
+            .map_err(|err| Error::new(TokenId::Address(address), err))?;
 
-                let symbol = instance
-                    .symbol()
-                    .call()
-                    .await
-                    .map_err(|err| Error::new(id.clone(), err))?;
+        let decimals = instance
+            .decimals()
+            .call()
+            .await
+            .map_err(|err| Error::new(TokenId::Address(address), err))?;
 
-                let decimals = instance
-                    .decimals()
-                    .call()
-                    .await
-                    .map_err(|err| Error::new(id.clone(), err))?;
-                let token = Token::new(a, symbol._0, decimals._0);
+        let token = Token::new(address, symbol._0, decimals._0);
 
-                let token = Arc::new(token);
+        Ok(token)
+    }
 
-                self.store.write().insert(self.chain_id, token.clone());
+    async fn get_token<'a, S>(&'a self, id: TokenId, store: &'a mut S) -> Result<&Token, Error>
+    where
+        S: TokenStore + Send,
+    {
+        let chain_id = self
+            .get_chain_id()
+            .await
+            .map_err(|err| Error::new(id.clone(), err))?;
 
-                Ok(token)
-            }
+        match store.entry(chain_id as u8, id.clone()) {
+            Entry::Occupied(e) => Ok(e.into_mut()),
+            Entry::Vacant(e) => match &id {
+                TokenId::Symbol(_) => Err(Error::new(id, InternalError::NotInStore)),
+                TokenId::Address(a) => {
+                    let token = self.retrieve_token(*a).await?;
+
+                    Ok(e.insert(token))
+                }
+            },
         }
     }
 
-    pub async fn balance_of(&self, token: Address, address: Address) -> Result<BigDecimal, Error> {
-        let instance = Erc20ContractInstance::new(token, &self.provider);
+    async fn balance_of(&self, token: Address, address: Address) -> Result<BigDecimal, Error> {
+        let instance = Erc20ContractInstance::new(token, self);
 
         let result = instance
             .balanceOf(address)
@@ -91,14 +67,19 @@ where
             .await
             .map_err(|err| Error::new(TokenId::Address(address), err))?;
 
-        let token = self.retrieve_token(TokenId::Address(token)).await?;
+        let token = self.retrieve_token(token).await?;
 
         let balance = token.get_balance(result.balance);
 
         Ok(balance)
     }
+}
 
-    pub fn iter(&self) -> StoreIter<RwLock<S>> {
-        StoreIter::from_lock(self.store.as_ref(), self.chain_id)
-    }
+#[async_trait]
+impl<P, T, N> Erc20ProviderExt<T, N> for P
+where
+    P: Provider<T, N>,
+    T: Transport + Clone,
+    N: Network,
+{
 }

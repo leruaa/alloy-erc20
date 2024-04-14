@@ -1,8 +1,8 @@
 use alloy::primitives::address;
 use alloy::providers::ProviderBuilder;
 use dotenv::dotenv;
-use erc20::Erc20Provider;
-use std::{env, sync::Arc};
+use erc20::Erc20ProviderExt;
+use std::env;
 
 #[tokio::test]
 async fn test_retrieve_token() {
@@ -11,10 +11,9 @@ async fn test_retrieve_token() {
     let provider = ProviderBuilder::new()
         .on_http(eth_rpc.parse().unwrap())
         .unwrap();
-    let erc_provider = Erc20Provider::new(Arc::new(provider), 1);
 
-    let dai = erc_provider
-        .retrieve_token(address!("6B175474E89094C44Da98b954EedeAC495271d0F").into())
+    let dai = provider
+        .retrieve_token(address!("6B175474E89094C44Da98b954EedeAC495271d0F"))
         .await
         .unwrap();
 

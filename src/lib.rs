@@ -4,7 +4,7 @@ mod constants;
 pub use constants::*;
 
 mod provider;
-pub use provider::Erc20Provider;
+pub use provider::Erc20ProviderExt;
 
 mod error;
 pub use error::Error;
