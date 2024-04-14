@@ -26,7 +26,7 @@ pub trait TokenStore: Sized {
 
     #[cfg(feature = "known-tokens")]
     fn insert_known_tokens(&mut self, chain_id: u8) {
-        use crate::mainnet;
+        use crate::{arbitrum, mainnet};
 
         if chain_id == 1 {
             self.insert(chain_id, Arc::new(mainnet::WETH.to_owned()));
@@ -34,7 +34,7 @@ pub trait TokenStore: Sized {
             self.insert(chain_id, Arc::new(mainnet::USDC.to_owned()));
             self.insert(chain_id, Arc::new(mainnet::USDT.to_owned()));
             self.insert(chain_id, Arc::new(mainnet::DAI.to_owned()));
-        } else if chain_id = 42161 {
+        } else if chain_id == 42161 {
             // Arbitrum
             self.insert(chain_id, Arc::new(arbitrum::WETH.to_owned()));
             self.insert(chain_id, Arc::new(arbitrum::USDC.to_owned()));
