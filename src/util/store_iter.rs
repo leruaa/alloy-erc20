@@ -2,6 +2,8 @@ use alloy::primitives::Address;
 
 use crate::{stores::TokenStore, Token, TokenId};
 
+/// A store iterator.
+#[derive(Debug)]
 pub struct StoreIter<'a, S> {
     chain_id: u8,
     store: &'a S,
@@ -13,6 +15,7 @@ impl<'a, S> StoreIter<'a, S>
 where
     S: TokenStore,
 {
+    /// Creates a new store iterator.
     pub fn new(store: &'a S, chain_id: u8) -> Self {
         let addresses = store.addresses(Some(chain_id)).collect();
         Self {

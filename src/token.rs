@@ -7,8 +7,11 @@ use bigdecimal::{
 /// A token.
 #[derive(Debug, Clone)]
 pub struct Token {
+    /// The token address.
     pub address: Address,
+    /// The token symbol.
     pub symbol: String,
+    /// The token decimals
     pub decimals: u8,
 }
 

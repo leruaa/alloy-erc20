@@ -7,7 +7,9 @@ use crate::TokenId;
 /// Token related error.
 #[derive(Error, Debug)]
 pub struct Error {
+    /// The error token.
     pub token: TokenId,
+    /// The error details.
     pub source: InternalError,
 }
 

@@ -17,10 +17,14 @@ pub trait TokenStore: Sized {
 
     /// Returns the value corresponding to the given id.
     fn get(&self, chain_id: u8, id: TokenId) -> Option<&Token>;
+    /// Returns an iterator of the symbols from all the tokens in the store.
     fn symbols(&self, chain_id: Option<u8>) -> impl Iterator<Item = String>;
+    /// Returns an iterator of the addresses from all the tokens in the store.
     fn addresses(&self, chain_id: Option<u8>) -> impl Iterator<Item = Address>;
+    /// Gets the entry for the given token id.
     fn entry(&mut self, chain_id: u8, id: TokenId) -> Entry<(u8, TokenId), Token>;
 
+    /// Returns an iterator over the store's tokens.
     fn iter(&self, chain_id: u8) -> StoreIter<Self> {
         StoreIter::new(self, chain_id)
     }
