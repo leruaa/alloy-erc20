@@ -20,12 +20,9 @@ alloy = { git = "https://github.com/alloy-rs/alloy", features = [
     "contract",
     "sol-types",
 ] }
-tokio = { version = "1", features = ["full"] }
 bigdecimal = "0.4"
 thiserror = "1.0"
-anyhow = "1.0"
 once_cell = "1.18"
-parking_lot = "0.12"
 async-trait = "0.1"
 
 [dev-dependencies]
