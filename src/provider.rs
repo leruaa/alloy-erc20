@@ -10,12 +10,14 @@ use crate::{
     TokenId,
 };
 
+/// Extends Alloy [`Provider`] trait with ERC-20 related features.
 #[async_trait]
 pub trait Erc20ProviderExt<T, N>: Provider<T, N> + Sized
 where
     T: Transport + Clone,
     N: Network,
 {
+    /// Retrieves a token by querying its ERC-20 contract.
     async fn retrieve_token(&self, address: Address) -> Result<Token, Error> {
         let instance = Erc20ContractInstance::new(address, self);
 
@@ -36,6 +38,8 @@ where
         Ok(token)
     }
 
+    /// Returns a token from the given store if present, otherwise retrieves
+    /// it from its ERC-20 contract and update the store.
     async fn get_token<'a, S>(&'a self, id: TokenId, store: &'a mut S) -> Result<&Token, Error>
     where
         S: TokenStore + Send,
@@ -58,6 +62,7 @@ where
         }
     }
 
+    /// Retrieves the given address balance from the given token contract.
     async fn balance_of(&self, token: Address, address: Address) -> Result<BigDecimal, Error> {
         let instance = Erc20ContractInstance::new(token, self);
 

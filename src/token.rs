@@ -4,7 +4,7 @@ use bigdecimal::{
     BigDecimal,
 };
 
-/// A token
+/// A token.
 #[derive(Debug, Clone)]
 pub struct Token {
     pub address: Address,
@@ -13,6 +13,7 @@ pub struct Token {
 }
 
 impl Token {
+    /// Creates a new token.
     pub const fn new(address: Address, symbol: String, decimals: u8) -> Self {
         Self {
             address,
@@ -21,6 +22,7 @@ impl Token {
         }
     }
 
+    /// Gets the token balance as [`BigDecimal`]
     pub fn get_balance(&self, amount: U256) -> BigDecimal {
         BigDecimal::from((
             BigInt::from_bytes_be(Sign::Plus, &amount.to_be_bytes::<{ U256::BYTES }>()),

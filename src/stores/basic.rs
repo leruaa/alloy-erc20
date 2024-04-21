@@ -6,12 +6,14 @@ use crate::{token_id::TokenId, Token};
 
 use super::TokenStore;
 
+/// A basic [`TokenStore`] implementation.
 #[derive(Debug, Default, Clone)]
 pub struct BasicTokenStore {
     tokens: HashMap<(u8, TokenId), Token>,
 }
 
 impl BasicTokenStore {
+    /// Creates a new [`BasicTokenStore`]
     pub fn new() -> Self {
         Self {
             tokens: HashMap::new(),

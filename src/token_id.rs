@@ -5,9 +5,12 @@ use std::{
 
 use alloy::primitives::Address;
 
+// A token identifier.
 #[derive(Clone, Debug, Eq, Hash, PartialEq)]
 pub enum TokenId {
+    /// Identify a token by its symbol
     Symbol(String),
+    /// Identify a token by its address
     Address(Address),
 }
 

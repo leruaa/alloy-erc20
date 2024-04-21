@@ -4,6 +4,7 @@ use thiserror::Error;
 
 use crate::TokenId;
 
+/// Token related error.
 #[derive(Error, Debug)]
 pub struct Error {
     pub token: TokenId,
@@ -11,6 +12,7 @@ pub struct Error {
 }
 
 impl Error {
+    /// Creates a new [`Error`]
     pub fn new<E: Into<InternalError>>(token: TokenId, source: E) -> Self {
         Self {
             token,
@@ -25,6 +27,7 @@ impl Display for Error {
     }
 }
 
+/// Token related possible errors
 #[derive(Error, Debug)]
 pub enum InternalError {
     #[error("The token is not present in store")]
