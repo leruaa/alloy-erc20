@@ -44,3 +44,26 @@ where
         token
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::{
+        mainnet::{USDC, WBTC, WETH},
+        stores::{BasicTokenStore, TokenStore},
+    };
+
+    #[test]
+    fn test_iter() {
+        let mut store = BasicTokenStore::new();
+
+        store.insert(1, WETH.clone());
+        store.insert(1, WBTC.clone());
+        store.insert(1, USDC.clone());
+
+        let mut iter = store.iter(1);
+
+        assert_eq!(iter.next().unwrap().symbol, "WETH");
+        assert_eq!(iter.next().unwrap().symbol, "WBTC");
+        assert_eq!(iter.next().unwrap().symbol, "USDC");
+    }
+}
