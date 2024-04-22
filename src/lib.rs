@@ -26,8 +26,8 @@ pub use token::Token;
 mod token_id;
 pub use token_id::TokenId;
 
-pub mod stores;
-pub mod util;
+mod stores;
+pub use stores::{BasicTokenStore, StoreIter, TokenStore};
 
 sol!(
     #[sol(rpc)]

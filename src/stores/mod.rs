@@ -1,11 +1,14 @@
 use std::collections::hash_map::Entry;
 
-use crate::{util::StoreIter, Token, TokenId};
-
-mod basic;
+use crate::{Token, TokenId};
 
 use alloy::primitives::Address;
+
+mod basic;
 pub use basic::BasicTokenStore;
+
+mod store_iter;
+pub use store_iter::StoreIter;
 
 /// A [`Token`] store
 pub trait TokenStore: Sized {
