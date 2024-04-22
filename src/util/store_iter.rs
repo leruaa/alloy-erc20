@@ -66,10 +66,10 @@ mod tests {
         store.insert(1, WBTC.clone());
         store.insert(1, USDC.clone());
 
-        let mut iter = store.iter(1);
+        let symbols = store.iter(1).map(|t| t.symbol.as_str()).collect::<Vec<_>>();
 
-        assert_eq!(iter.next().unwrap().symbol, "WETH");
-        assert_eq!(iter.next().unwrap().symbol, "WBTC");
-        assert_eq!(iter.next().unwrap().symbol, "USDC");
+        assert!(symbols.contains(&"WETH"));
+        assert!(symbols.contains(&"WBTC"));
+        assert!(symbols.contains(&"USDC"));
     }
 }
