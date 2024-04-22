@@ -1,14 +1,18 @@
 use std::collections::hash_map::Entry;
 
-use alloy::primitives::Address;
-use alloy::{network::Network, providers::Provider, transports::Transport};
+use alloy::{
+    network::Network, primitives::Address, providers::Provider, sol, transports::Transport,
+};
 use async_trait::async_trait;
 use bigdecimal::BigDecimal;
 
-use crate::{
-    error::InternalError, stores::TokenStore, Erc20Contract::Erc20ContractInstance, Error, Token,
-    TokenId,
-};
+use crate::{error::InternalError, stores::TokenStore, Error, Token, TokenId};
+
+sol!(
+    #[sol(rpc)]
+    Erc20Contract,
+    "abi/erc20.json"
+);
 
 /// Extends Alloy [`Provider`] trait with ERC-20 related features.
 #[async_trait]

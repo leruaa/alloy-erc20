@@ -9,8 +9,6 @@
 )]
 #![cfg_attr(not(test), warn(unused_crate_dependencies))]
 
-use alloy::sol;
-
 mod constants;
 pub use constants::*;
 
@@ -28,9 +26,3 @@ pub use token_id::TokenId;
 
 mod stores;
 pub use stores::{BasicTokenStore, StoreIter, TokenStore};
-
-sol!(
-    #[sol(rpc)]
-    Erc20Contract,
-    "abi/erc20.json"
-);
