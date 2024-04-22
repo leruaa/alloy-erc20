@@ -1,14 +1,14 @@
+use std::fmt::{self, Debug};
+
 use alloy::primitives::Address;
 
 use crate::{stores::TokenStore, Token, TokenId};
 
 /// A store iterator.
-#[derive(Debug)]
 pub struct StoreIter<'a, S> {
     chain_id: u8,
     store: &'a S,
-    addresses: Vec<Address>,
-    current_index: usize,
+    addresses_iter: Box<dyn Iterator<Item = Address> + 'a>,
 }
 
 impl<'a, S> StoreIter<'a, S>
@@ -17,13 +17,21 @@ where
 {
     /// Creates a new store iterator.
     pub fn new(store: &'a S, chain_id: u8) -> Self {
-        let addresses = store.addresses(Some(chain_id)).collect();
+        let addresses_iter = store.addresses(Some(chain_id));
         Self {
             chain_id,
             store,
-            addresses,
-            current_index: 0,
+            addresses_iter,
         }
+    }
+}
+
+impl<'a, S: Debug> Debug for StoreIter<'a, S> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("StoreIter")
+            .field("chain_id", &self.chain_id)
+            .field("store", &self.store)
+            .finish()
     }
 }
 
@@ -34,14 +42,12 @@ where
     type Item = &'a Token;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let token = self
-            .addresses
-            .get(self.current_index)
-            .and_then(|a| self.store.get(self.chain_id, TokenId::Address(*a)));
-
-        self.current_index += 1;
-
-        token
+        match self.addresses_iter.next() {
+            Some(current_address) => self
+                .store
+                .get(self.chain_id, TokenId::Address(current_address)),
+            None => None,
+        }
     }
 }
 

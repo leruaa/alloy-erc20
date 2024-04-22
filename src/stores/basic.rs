@@ -37,26 +37,34 @@ impl TokenStore for BasicTokenStore {
         self.tokens.get(&(chain_id, id.clone()))
     }
 
-    fn symbols(&self, chain_id: Option<u8>) -> impl Iterator<Item = String> {
-        self.tokens
-            .keys()
-            .filter_map(move |(token_chain_id, id)| match (id, chain_id) {
-                (TokenId::Symbol(id), Some(chain_id)) if token_chain_id == &chain_id => {
-                    Some(id.clone())
-                }
-                (TokenId::Symbol(id), None) => Some(id.clone()),
-                _ => None,
-            })
+    fn symbols<'a>(&'a self, chain_id: Option<u8>) -> Box<dyn Iterator<Item = String> + 'a> {
+        let iter =
+            self.tokens
+                .keys()
+                .filter_map(move |(token_chain_id, id)| match (id, chain_id) {
+                    (TokenId::Symbol(id), Some(chain_id)) if token_chain_id == &chain_id => {
+                        Some(id.clone())
+                    }
+                    (TokenId::Symbol(id), None) => Some(id.clone()),
+                    _ => None,
+                });
+
+        Box::new(iter)
     }
 
-    fn addresses(&self, chain_id: Option<u8>) -> impl Iterator<Item = Address> {
-        self.tokens
-            .keys()
-            .filter_map(move |(token_chain_id, id)| match (id, chain_id) {
-                (TokenId::Address(id), Some(chain_id)) if token_chain_id == &chain_id => Some(*id),
-                (TokenId::Address(id), None) => Some(*id),
-                _ => None,
-            })
+    fn addresses<'a>(&'a self, chain_id: Option<u8>) -> Box<dyn Iterator<Item = Address> + 'a> {
+        let iter =
+            self.tokens
+                .keys()
+                .filter_map(move |(token_chain_id, id)| match (id, chain_id) {
+                    (TokenId::Address(id), Some(chain_id)) if token_chain_id == &chain_id => {
+                        Some(*id)
+                    }
+                    (TokenId::Address(id), None) => Some(*id),
+                    _ => None,
+                });
+
+        Box::new(iter)
     }
 
     fn entry(&mut self, chain_id: u8, id: TokenId) -> Entry<(u8, TokenId), Token> {
