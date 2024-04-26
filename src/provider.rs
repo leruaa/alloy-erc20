@@ -23,7 +23,7 @@ where
 {
     /// Retrieves a token by querying its ERC-20 contract.
     async fn retrieve_token(&self, address: Address) -> Result<Token, Error> {
-        let instance = Erc20ContractInstance::new(address, self);
+        let instance = Erc20Contract::Erc20ContractInstance::new(address, self);
 
         let symbol = instance
             .symbol()
@@ -68,7 +68,7 @@ where
 
     /// Retrieves the given address balance from the given token contract.
     async fn balance_of(&self, token: Address, address: Address) -> Result<BigDecimal, Error> {
-        let instance = Erc20ContractInstance::new(token, self);
+        let instance = Erc20Contract::Erc20ContractInstance::new(token, self);
 
         let result = instance
             .balanceOf(address)
