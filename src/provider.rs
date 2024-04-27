@@ -29,13 +29,13 @@ where
             .symbol()
             .call()
             .await
-            .map_err(|err| Error::new(TokenId::Address(address), err))?;
+            .map_err(|err| Error::new(address.into(), err))?;
 
         let decimals = instance
             .decimals()
             .call()
             .await
-            .map_err(|err| Error::new(TokenId::Address(address), err))?;
+            .map_err(|err| Error::new(address.into(), err))?;
 
         let token = Token::new(address, symbol._0, decimals._0);
 
@@ -74,7 +74,7 @@ where
             .balanceOf(address)
             .call()
             .await
-            .map_err(|err| Error::new(TokenId::Address(address), err))?;
+            .map_err(|err| Error::new(address.into(), err))?;
 
         let token = self.retrieve_token(token).await?;
 

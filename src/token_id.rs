@@ -1,6 +1,8 @@
 use std::{
+    convert::Infallible,
     fmt::{Display, Formatter},
     hash::Hash,
+    str::FromStr,
 };
 
 use alloy::primitives::Address;
@@ -26,5 +28,13 @@ impl Display for TokenId {
 impl From<Address> for TokenId {
     fn from(value: Address) -> Self {
         TokenId::Address(value)
+    }
+}
+
+impl FromStr for TokenId {
+    type Err = Infallible;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(TokenId::Symbol(s.to_string()))
     }
 }
