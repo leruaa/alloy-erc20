@@ -21,6 +21,9 @@ pub use error::Error;
 mod token;
 pub use token::Token;
 
+mod lazy_token;
+pub use lazy_token::LazyToken;
+
 mod token_id;
 pub use token_id::TokenId;
 
