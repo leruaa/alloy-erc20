@@ -84,4 +84,23 @@ where
             )
             .await
     }
+
+    /// Returns the value of tokens owned by `account`.
+    pub async fn balance_of(&self, account: Address) -> Result<U256, Error> {
+        self.instance
+            .balanceOf(account)
+            .call()
+            .and_then(|r| ready(Ok(r.balance)))
+            .await
+    }
+
+    /// Returns the remaining number of tokens that `spender` will be
+    /// allowed to spend on behalf of `owner`.
+    pub async fn allowance(&self, owner: Address, spender: Address) -> Result<U256, Error> {
+        self.instance
+            .allowance(owner, spender)
+            .call()
+            .and_then(|r| ready(Ok(r._0)))
+            .await
+    }
 }
