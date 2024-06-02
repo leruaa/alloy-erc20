@@ -1,4 +1,8 @@
-use std::{fmt::Debug, future::ready, marker::PhantomData};
+use std::{
+    fmt::Debug,
+    future::{ready, IntoFuture},
+    marker::PhantomData,
+};
 
 use alloy::{
     contract::Error,
@@ -50,14 +54,26 @@ where
     /// Returns the name of the token.
     pub async fn name(&self) -> Result<&String, Error> {
         self.name
-            .get_or_try_init(self.instance.name().call().and_then(|r| ready(Ok(r._0))))
+            .get_or_try_init(
+                self.instance
+                    .name()
+                    .call()
+                    .into_future()
+                    .and_then(|r| ready(Ok(r._0))),
+            )
             .await
     }
 
     /// Returns the symbol of the token.
     pub async fn symbol(&self) -> Result<&String, Error> {
         self.symbol
-            .get_or_try_init(self.instance.symbol().call().and_then(|r| ready(Ok(r._0))))
+            .get_or_try_init(
+                self.instance
+                    .symbol()
+                    .call()
+                    .into_future()
+                    .and_then(|r| ready(Ok(r._0))),
+            )
             .await
     }
 
@@ -68,6 +84,7 @@ where
                 self.instance
                     .decimals()
                     .call()
+                    .into_future()
                     .and_then(|r| ready(Ok(r._0))),
             )
             .await
@@ -80,6 +97,7 @@ where
                 self.instance
                     .totalSupply()
                     .call()
+                    .into_future()
                     .and_then(|r| ready(Ok(r._0))),
             )
             .await
@@ -90,6 +108,7 @@ where
         self.instance
             .balanceOf(account)
             .call()
+            .into_future()
             .and_then(|r| ready(Ok(r.balance)))
             .await
     }
@@ -100,6 +119,7 @@ where
         self.instance
             .allowance(owner, spender)
             .call()
+            .into_future()
             .and_then(|r| ready(Ok(r._0)))
             .await
     }

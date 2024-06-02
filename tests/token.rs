@@ -8,9 +8,7 @@ use std::env;
 async fn test_retrieve_token() {
     dotenv().ok();
     let eth_rpc = env::var("ETH_RPC").unwrap();
-    let provider = ProviderBuilder::new()
-        .on_http(eth_rpc.parse().unwrap())
-        .unwrap();
+    let provider = ProviderBuilder::new().on_http(eth_rpc.parse().unwrap());
 
     let dai = provider
         .retrieve_token(address!("6B175474E89094C44Da98b954EedeAC495271d0F"))
