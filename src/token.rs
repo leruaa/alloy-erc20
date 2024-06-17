@@ -25,7 +25,7 @@ impl Token {
         }
     }
 
-    /// Gets the token balance as [`BigDecimal`]
+    /// Gets the token balance as a [`BigDecimal`]
     pub fn get_balance(&self, amount: U256) -> BigDecimal {
         BigDecimal::from((
             BigInt::from_bytes_be(Sign::Plus, &amount.to_be_bytes::<{ U256::BYTES }>()),

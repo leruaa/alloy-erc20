@@ -10,7 +10,7 @@ contracts.
 Add `erc20-rs` to your `Cargo.toml`.
 
 ```toml
-erc20-rs = "0.1"
+erc20-rs = { git = "https://github.com/leruaa/erc20-rs" }
 ```
 
 ## Features
@@ -23,3 +23,17 @@ erc20-rs = "0.1"
 * A `LazyToken` struct, acting as a wrapper around Alloy contract instance,
   lazily retrieving `name`, `symbol`, `decimals` and `totalSupply` from the
   blockchain.
+
+## Getting started
+
+```rust
+let provider = ProviderBuilder::new().on_http("https://...".parse()?);
+
+// Just retrieve a token from its address
+let dai = provider
+    .retrieve_token(address!("6B175474E89094C44Da98b954EedeAC495271d0F"))
+    .await?;
+
+// Compute a balance as a BigDecimal from a U256
+let balance = dai.get_balance(U256::from(1000000000000_u64));
+```
