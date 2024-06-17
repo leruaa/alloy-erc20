@@ -1,7 +1,7 @@
 use alloy::primitives::address;
 use alloy::providers::ProviderBuilder;
+use alloy_erc20::Erc20ProviderExt;
 use dotenv::dotenv;
-use erc20::Erc20ProviderExt;
 use std::env;
 
 #[tokio::test]

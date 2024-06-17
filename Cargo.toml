@@ -1,5 +1,5 @@
 [package]
-name = "erc20"
+name = "alloy-erc20"
 version = "0.1.0"
 edition = "2021"
 authors = ["leruaa"]
@@ -7,9 +7,9 @@ keywords = ["alloy", "ethereum", "erc20"]
 categories = ["cryptography::cryptocurrencies", "data-structures"]
 license = "MIT"
 readme = "./README.md"
-documentation = "https://docs.rs/erc20-rs"
-repository = "https://github.com/leruaa/erc20-rs"
-homepage = "https://github.com/leruaa/erc20-rs"
+documentation = "https://docs.rs/alloy-erc20"
+repository = "https://github.com/leruaa/alloy-erc20"
+homepage = "https://github.com/leruaa/alloy-erc20"
 description = """
 Interact with ERC-20 contracts via Alloy.
 """
