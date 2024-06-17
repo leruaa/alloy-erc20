@@ -18,7 +18,7 @@ Interact with ERC-20 contracts via Alloy.
 known-tokens = []
 
 [dependencies]
-alloy = { git = "https://github.com/alloy-rs/alloy", features = [
+alloy = { version = "0.1", features = [
     "network",
     "providers",
     "transports",
