@@ -12,6 +12,10 @@ use alloy::{
     transports::Transport,
 };
 use async_once_cell::OnceCell;
+use bigdecimal::{
+    num_bigint::{BigInt, Sign},
+    BigDecimal,
+};
 use futures::TryFutureExt;
 
 use crate::provider::Erc20Contract;
@@ -122,5 +126,17 @@ where
             .into_future()
             .and_then(|r| ready(Ok(r._0)))
             .await
+    }
+
+    /// Gets the token balance as a [`BigDecimal`]
+    pub async fn get_balance(&self, amount: U256) -> Result<BigDecimal, Error> {
+        let decimals = self.decimals().await?;
+
+        let balance = BigDecimal::from((
+            BigInt::from_bytes_be(Sign::Plus, &amount.to_be_bytes::<{ U256::BYTES }>()),
+            *decimals as i64,
+        ));
+
+        Ok(balance)
     }
 }
