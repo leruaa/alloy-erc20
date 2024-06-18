@@ -6,7 +6,7 @@ use alloy::{
 use async_trait::async_trait;
 use bigdecimal::BigDecimal;
 
-use crate::{error::InternalError, stores::TokenStore, Error, Token, TokenId};
+use crate::{stores::TokenStore, Error, Token, TokenId};
 
 sol!(
     #[sol(rpc)]
@@ -44,25 +44,23 @@ where
 
     /// Returns a token from the given store if present, otherwise retrieves
     /// it from its ERC-20 contract and update the store.
-    async fn get_token<'a, S>(&'a self, id: TokenId, store: &'a mut S) -> Result<&Token, Error>
+    async fn get_token<'a, S>(&'a self, address: Address, store: &'a mut S) -> Result<&Token, Error>
     where
         S: TokenStore + Send,
     {
+        let id = TokenId::Address(address);
         let chain_id = self
             .get_chain_id()
             .await
             .map_err(|err| Error::new(id.clone(), err))?;
 
-        match store.entry(chain_id as u8, id.clone()) {
+        match store.entry(chain_id as u8, id) {
             Entry::Occupied(e) => Ok(e.into_mut()),
-            Entry::Vacant(e) => match &id {
-                TokenId::Symbol(_) => Err(Error::new(id, InternalError::NotInStore)),
-                TokenId::Address(a) => {
-                    let token = self.retrieve_token(*a).await?;
+            Entry::Vacant(e) => {
+                let token = self.retrieve_token(address).await?;
 
-                    Ok(e.insert(token))
-                }
-            },
+                Ok(e.insert(token))
+            }
         }
     }
 
