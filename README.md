@@ -67,6 +67,6 @@ let provider = ProviderBuilder::new().on_http("https://...".parse()?);
 
 let dai = LazyToken::new(address!("6B175474E89094C44Da98b954EedeAC495271d0F"), provider);
 
-// lazily query the network for the total supply and cache the result
-let total_supply = dai.total_supply()?;
+// lazily query the network for the decimals and cache the result
+let total_supply = dai.decimals()?;
 ```

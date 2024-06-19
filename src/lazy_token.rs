@@ -27,7 +27,6 @@ pub struct LazyToken<P, T, N> {
     name: OnceCell<String>,
     symbol: OnceCell<String>,
     decimals: OnceCell<u8>,
-    total_supply: OnceCell<U256>,
     instance: Erc20Contract::Erc20ContractInstance<T, P, N>,
     phantom: PhantomData<(T, N)>,
 }
@@ -44,7 +43,6 @@ where
             name: OnceCell::new(),
             symbol: OnceCell::new(),
             decimals: OnceCell::new(),
-            total_supply: OnceCell::new(),
             instance: Erc20Contract::Erc20ContractInstance::new(address, provider),
             phantom: PhantomData,
         }
@@ -95,15 +93,12 @@ where
     }
 
     /// Returns the amount of tokens in existence.
-    pub async fn total_supply(&self) -> Result<&U256, Error> {
-        self.total_supply
-            .get_or_try_init(
-                self.instance
-                    .totalSupply()
-                    .call()
-                    .into_future()
-                    .and_then(|r| ready(Ok(r._0))),
-            )
+    pub async fn total_supply(&self) -> Result<U256, Error> {
+        self.instance
+            .totalSupply()
+            .call()
+            .into_future()
+            .and_then(|r| ready(Ok(r._0)))
             .await
     }
 
