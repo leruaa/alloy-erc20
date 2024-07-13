@@ -10,7 +10,7 @@ contracts.
 Add `alloy-erc20` to your `Cargo.toml`.
 
 ```toml
-alloy-erc20 = { git = "https://github.com/leruaa/alloy-erc20" }
+alloy-erc20 = "0.1"
 ```
 
 ## Features

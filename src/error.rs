@@ -32,6 +32,8 @@ impl Display for Error {
 /// Token related possible errors
 #[derive(Error, Debug)]
 pub enum InternalError {
+    #[error("The token {0} is not present in the store")]
+    NotInStore(String),
     #[error("Failed to query token: {0}")]
     Transport(#[from] alloy::transports::TransportError),
     #[error("Contract error: {0}")]
