@@ -20,7 +20,7 @@ known-tokens = []
 lru-store = ["dep:lru", "dep:parking_lot"]
 
 [dependencies]
-alloy = { version = "0.1", features = [
+alloy = { version = "0.2", features = [
     "network",
     "providers",
     "transports",
