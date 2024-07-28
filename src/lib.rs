@@ -29,3 +29,6 @@ pub use token_id::TokenId;
 
 mod stores;
 pub use stores::{BasicTokenStore, Entry, StoreIter, TokenStore};
+
+#[cfg(feature = "lru-store")]
+pub use stores::LruTokenStore;
