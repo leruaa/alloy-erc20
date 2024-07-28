@@ -1,12 +1,10 @@
-use std::collections::hash_map::Entry;
-
 use alloy::{
     network::Network, primitives::Address, providers::Provider, sol, transports::Transport,
 };
 use async_trait::async_trait;
 use bigdecimal::BigDecimal;
 
-use crate::{error::InternalError, stores::TokenStore, Error, Token, TokenId};
+use crate::{error::InternalError, stores::TokenStore, Entry, Error, Token, TokenId};
 
 sol!(
     #[sol(rpc)]
@@ -46,7 +44,7 @@ where
     /// it from its ERC-20 contract and update the store.
     async fn get_token<'a, Id, S>(&'a self, id: Id, store: &'a mut S) -> Result<&Token, Error>
     where
-        S: TokenStore + Send,
+        S: TokenStore<'a> + Send,
         Id: Into<TokenId> + Send,
     {
         let id: TokenId = id.into();

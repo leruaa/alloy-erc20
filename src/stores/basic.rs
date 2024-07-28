@@ -1,4 +1,4 @@
-use std::collections::{hash_map::Entry, HashMap};
+use std::collections::HashMap;
 
 use alloy::primitives::Address;
 
@@ -21,7 +21,17 @@ impl BasicTokenStore {
     }
 }
 
-impl TokenStore for BasicTokenStore {
+impl<'a> TokenStore<'a> for BasicTokenStore {
+    type Item = &'a Token;
+
+    fn get(&'a self, chain_id: u8, id: TokenId) -> Option<Self::Item> {
+        self.tokens.get(&(chain_id, id.clone()))
+    }
+
+    fn get_mut(&mut self, chain_id: u8, id: TokenId) -> Option<&mut Token> {
+        self.tokens.get_mut(&(chain_id, id.clone()))
+    }
+
     fn insert(&mut self, chain_id: u8, token: Token) {
         self.tokens
             .insert((chain_id, TokenId::Address(token.address)), token.clone());
@@ -33,41 +43,27 @@ impl TokenStore for BasicTokenStore {
         self.tokens.contains_key(&(chain_id, id))
     }
 
-    fn get(&self, chain_id: u8, id: TokenId) -> Option<&Token> {
-        self.tokens.get(&(chain_id, id.clone()))
+    fn symbols(&'a self, chain_id: Option<u8>) -> Vec<String> {
+        self.tokens
+            .keys()
+            .filter_map(move |(token_chain_id, id)| match (id, chain_id) {
+                (TokenId::Symbol(id), Some(chain_id)) if token_chain_id == &chain_id => {
+                    Some(id.clone())
+                }
+                (TokenId::Symbol(id), None) => Some(id.clone()),
+                _ => None,
+            })
+            .collect()
     }
 
-    fn symbols<'a>(&'a self, chain_id: Option<u8>) -> Box<dyn Iterator<Item = String> + 'a> {
-        let iter =
-            self.tokens
-                .keys()
-                .filter_map(move |(token_chain_id, id)| match (id, chain_id) {
-                    (TokenId::Symbol(id), Some(chain_id)) if token_chain_id == &chain_id => {
-                        Some(id.clone())
-                    }
-                    (TokenId::Symbol(id), None) => Some(id.clone()),
-                    _ => None,
-                });
-
-        Box::new(iter)
-    }
-
-    fn addresses<'a>(&'a self, chain_id: Option<u8>) -> Box<dyn Iterator<Item = Address> + 'a> {
-        let iter =
-            self.tokens
-                .keys()
-                .filter_map(move |(token_chain_id, id)| match (id, chain_id) {
-                    (TokenId::Address(id), Some(chain_id)) if token_chain_id == &chain_id => {
-                        Some(*id)
-                    }
-                    (TokenId::Address(id), None) => Some(*id),
-                    _ => None,
-                });
-
-        Box::new(iter)
-    }
-
-    fn entry(&mut self, chain_id: u8, id: TokenId) -> Entry<(u8, TokenId), Token> {
-        self.tokens.entry((chain_id, id))
+    fn addresses(&'a self, chain_id: Option<u8>) -> Vec<Address> {
+        self.tokens
+            .keys()
+            .filter_map(move |(token_chain_id, id)| match (id, chain_id) {
+                (TokenId::Address(id), Some(chain_id)) if token_chain_id == &chain_id => Some(*id),
+                (TokenId::Address(id), None) => Some(*id),
+                _ => None,
+            })
+            .collect()
     }
 }

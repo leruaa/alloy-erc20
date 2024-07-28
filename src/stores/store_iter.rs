@@ -2,26 +2,29 @@ use std::fmt::{self, Debug};
 
 use alloy::primitives::Address;
 
-use crate::{stores::TokenStore, Token, TokenId};
+use crate::TokenId;
+
+use super::TokenStore;
 
 /// A store iterator.
 pub struct StoreIter<'a, S> {
     chain_id: u8,
     store: &'a S,
-    addresses_iter: Box<dyn Iterator<Item = Address> + 'a>,
+    addresses: Vec<Address>,
+    index: usize,
 }
 
 impl<'a, S> StoreIter<'a, S>
 where
-    S: TokenStore,
+    S: TokenStore<'a>,
 {
     /// Creates a new store iterator.
     pub fn new(store: &'a S, chain_id: u8) -> Self {
-        let addresses_iter = store.addresses(Some(chain_id));
         Self {
             chain_id,
             store,
-            addresses_iter,
+            addresses: store.addresses(Some(chain_id)),
+            index: 0,
         }
     }
 }
@@ -37,17 +40,21 @@ impl<'a, S: Debug> Debug for StoreIter<'a, S> {
 
 impl<'a, S> Iterator for StoreIter<'a, S>
 where
-    S: TokenStore,
+    S: TokenStore<'a>,
 {
-    type Item = &'a Token;
+    type Item = S::Item;
 
     fn next(&mut self) -> Option<Self::Item> {
-        match self.addresses_iter.next() {
+        let item = match self.addresses.get(self.index) {
             Some(current_address) => self
                 .store
-                .get(self.chain_id, TokenId::Address(current_address)),
+                .get(self.chain_id, TokenId::Address(*current_address)),
             None => None,
-        }
+        };
+
+        self.index += 1;
+
+        item
     }
 }
 
@@ -55,7 +62,8 @@ where
 mod tests {
     use crate::{
         mainnet::{USDC, WBTC, WETH},
-        stores::{BasicTokenStore, TokenStore},
+        stores::BasicTokenStore,
+        TokenStore,
     };
 
     #[test]

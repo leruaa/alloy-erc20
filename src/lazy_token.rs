@@ -38,7 +38,7 @@ where
     N: Network,
 {
     /// Creates a new [`LazyToken`].
-    pub fn new(address: Address, provider: P) -> Self {
+    pub const fn new(address: Address, provider: P) -> Self {
         Self {
             name: OnceCell::new(),
             symbol: OnceCell::new(),

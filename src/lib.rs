@@ -28,4 +28,4 @@ mod token_id;
 pub use token_id::TokenId;
 
 mod stores;
-pub use stores::{BasicTokenStore, StoreIter, TokenStore};
+pub use stores::{BasicTokenStore, Entry, StoreIter, TokenStore};
