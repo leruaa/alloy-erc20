@@ -9,7 +9,7 @@ use super::TokenStore;
 /// A basic [`TokenStore`] implementation.
 #[derive(Debug, Default, Clone)]
 pub struct BasicTokenStore {
-    tokens: HashMap<(u8, TokenId), Token>,
+    tokens: HashMap<(u64, TokenId), Token>,
 }
 
 impl BasicTokenStore {
@@ -24,26 +24,26 @@ impl BasicTokenStore {
 impl<'a> TokenStore<'a> for BasicTokenStore {
     type Item = &'a Token;
 
-    fn get(&'a self, chain_id: u8, id: TokenId) -> Option<Self::Item> {
+    fn get(&'a self, chain_id: u64, id: TokenId) -> Option<Self::Item> {
         self.tokens.get(&(chain_id, id.clone()))
     }
 
-    fn get_mut(&mut self, chain_id: u8, id: TokenId) -> Option<&mut Token> {
+    fn get_mut(&mut self, chain_id: u64, id: TokenId) -> Option<&mut Token> {
         self.tokens.get_mut(&(chain_id, id.clone()))
     }
 
-    fn insert(&mut self, chain_id: u8, token: Token) {
+    fn insert(&mut self, chain_id: u64, token: Token) {
         self.tokens
             .insert((chain_id, TokenId::Address(token.address)), token.clone());
         self.tokens
             .insert((chain_id, TokenId::Symbol(token.symbol.to_string())), token);
     }
 
-    fn contains(&self, chain_id: u8, id: TokenId) -> bool {
+    fn contains(&self, chain_id: u64, id: TokenId) -> bool {
         self.tokens.contains_key(&(chain_id, id))
     }
 
-    fn symbols(&'a self, chain_id: Option<u8>) -> Vec<String> {
+    fn symbols(&'a self, chain_id: Option<u64>) -> Vec<String> {
         self.tokens
             .keys()
             .filter_map(move |(token_chain_id, id)| match (id, chain_id) {
@@ -56,7 +56,7 @@ impl<'a> TokenStore<'a> for BasicTokenStore {
             .collect()
     }
 
-    fn addresses(&'a self, chain_id: Option<u8>) -> Vec<Address> {
+    fn addresses(&'a self, chain_id: Option<u64>) -> Vec<Address> {
         self.tokens
             .keys()
             .filter_map(move |(token_chain_id, id)| match (id, chain_id) {

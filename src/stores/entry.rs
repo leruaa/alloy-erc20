@@ -20,7 +20,7 @@ where
     S: TokenStore<'a>,
 {
     /// Creates a new [`Entry`].
-    pub fn new(chain_id: u8, id: TokenId, store: &'a mut S) -> Self {
+    pub fn new(chain_id: u64, id: TokenId, store: &'a mut S) -> Self {
         if store.contains(chain_id, id.clone()) {
             Self::Occupied(OccupiedEntry::new(chain_id, id, store))
         } else {
@@ -35,7 +35,7 @@ pub struct OccupiedEntry<'a> {
 }
 
 impl<'a> OccupiedEntry<'a> {
-    pub fn new<S>(chain_id: u8, id: TokenId, store: &'a mut S) -> Self
+    pub fn new<S>(chain_id: u64, id: TokenId, store: &'a mut S) -> Self
     where
         S: TokenStore<'a>,
     {
@@ -66,7 +66,7 @@ pub struct VacantEntry<'a, S>
 where
     S: TokenStore<'a>,
 {
-    chain_id: u8,
+    chain_id: u64,
     id: TokenId,
     store: &'a mut S,
 }
@@ -75,7 +75,7 @@ impl<'a, S> VacantEntry<'a, S>
 where
     S: TokenStore<'a>,
 {
-    pub fn new(chain_id: u8, id: TokenId, store: &'a mut S) -> Self {
+    pub fn new(chain_id: u64, id: TokenId, store: &'a mut S) -> Self {
         Self {
             chain_id,
             id,
@@ -91,7 +91,7 @@ where
 
     /// Gets the chain id that would be used when inserting a value through
     /// the [`VacantEntry`]
-    pub const fn chain_id(&self) -> u8 {
+    pub const fn chain_id(&self) -> u64 {
         self.chain_id
     }
 

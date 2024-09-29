@@ -53,7 +53,7 @@ where
             .await
             .map_err(|err| Error::new(id.clone(), err))?;
 
-        match store.entry(chain_id as u8, id.clone()) {
+        match store.entry(chain_id, id.clone()) {
             Entry::Occupied(e) => Ok(e.into_mut()),
             Entry::Vacant(e) => {
                 let token = match id.clone() {

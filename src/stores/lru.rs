@@ -11,7 +11,7 @@ use super::TokenStore;
 /// A basic [`TokenStore`] implementation.
 #[derive(Debug)]
 pub struct LruTokenStore {
-    tokens: RwLock<LruCache<(u8, TokenId), Token>>,
+    tokens: RwLock<LruCache<(u64, TokenId), Token>>,
 }
 
 impl LruTokenStore {
@@ -26,31 +26,31 @@ impl LruTokenStore {
 impl<'a> TokenStore<'a> for LruTokenStore {
     type Item = MappedRwLockWriteGuard<'a, Token>;
 
-    fn get(&'a self, chain_id: u8, id: TokenId) -> Option<Self::Item> {
+    fn get(&'a self, chain_id: u64, id: TokenId) -> Option<Self::Item> {
         RwLockWriteGuard::try_map(self.tokens.write(), |tokens| {
             tokens.get_mut(&(chain_id, id))
         })
         .ok()
     }
 
-    fn get_mut(&mut self, chain_id: u8, id: TokenId) -> Option<&mut Token> {
+    fn get_mut(&mut self, chain_id: u64, id: TokenId) -> Option<&mut Token> {
         self.tokens.get_mut().get_mut(&(chain_id, id))
     }
 
-    fn insert(&mut self, chain_id: u8, token: Token) {
+    fn insert(&mut self, chain_id: u64, token: Token) {
         let mut tokens = self.tokens.write();
 
         tokens.put((chain_id, TokenId::Address(token.address)), token.clone());
         tokens.put((chain_id, TokenId::Symbol(token.symbol.to_string())), token);
     }
 
-    fn contains(&self, chain_id: u8, id: TokenId) -> bool {
+    fn contains(&self, chain_id: u64, id: TokenId) -> bool {
         let tokens = self.tokens.read();
 
         tokens.contains(&(chain_id, id))
     }
 
-    fn symbols(&'a self, chain_id: Option<u8>) -> Vec<String> {
+    fn symbols(&'a self, chain_id: Option<u64>) -> Vec<String> {
         let tokens = self.tokens.read();
 
         tokens
@@ -65,7 +65,7 @@ impl<'a> TokenStore<'a> for LruTokenStore {
             .collect::<Vec<_>>()
     }
 
-    fn addresses(&'a self, chain_id: Option<u8>) -> Vec<Address> {
+    fn addresses(&'a self, chain_id: Option<u64>) -> Vec<Address> {
         let tokens = self.tokens.read();
 
         tokens

@@ -12,35 +12,35 @@ pub trait TokenStore<'a>: Sized {
     type Item: Deref<Target = Token>;
 
     /// Returns the value corresponding to the given id.
-    fn get(&'a self, chain_id: u8, id: TokenId) -> Option<Self::Item>;
+    fn get(&'a self, chain_id: u64, id: TokenId) -> Option<Self::Item>;
 
     /// Returns the mutable value corresponding to the given id.
-    fn get_mut(&mut self, chain_id: u8, id: TokenId) -> Option<&mut Token>;
+    fn get_mut(&mut self, chain_id: u64, id: TokenId) -> Option<&mut Token>;
 
     /// Inserts a token into the store.
-    fn insert(&mut self, chain_id: u8, token: Token);
+    fn insert(&mut self, chain_id: u64, token: Token);
 
     /// Returns `true` if the store contains a value for the specified `id`.
-    fn contains(&self, chain_id: u8, id: TokenId) -> bool;
+    fn contains(&self, chain_id: u64, id: TokenId) -> bool;
 
     /// Returns the symbols from all the tokens in the store.
-    fn symbols(&'a self, chain_id: Option<u8>) -> Vec<String>;
+    fn symbols(&'a self, chain_id: Option<u64>) -> Vec<String>;
 
     /// Returns the addresses from all the tokens in the store.
-    fn addresses(&'a self, chain_id: Option<u8>) -> Vec<Address>;
+    fn addresses(&'a self, chain_id: Option<u64>) -> Vec<Address>;
 
     /// Gets the entry for the given token id.
-    fn entry(&'a mut self, chain_id: u8, id: TokenId) -> Entry<'a, Self> {
+    fn entry(&'a mut self, chain_id: u64, id: TokenId) -> Entry<'a, Self> {
         Entry::new(chain_id, id, self)
     }
 
     /// Returns an iterator over the store's tokens.
-    fn iter(&'a self, chain_id: u8) -> StoreIter<'a, Self> {
+    fn iter(&'a self, chain_id: u64) -> StoreIter<'a, Self> {
         StoreIter::new(self, chain_id)
     }
 
     #[cfg(feature = "known-tokens")]
-    fn insert_known_tokens(&mut self, chain_id: u8) {
+    fn insert_known_tokens(&mut self, chain_id: u64) {
         use crate::{arbitrum, mainnet};
 
         if chain_id == 1 {

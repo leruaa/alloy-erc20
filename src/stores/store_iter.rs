@@ -8,7 +8,7 @@ use super::TokenStore;
 
 /// A store iterator.
 pub struct StoreIter<'a, S> {
-    chain_id: u8,
+    chain_id: u64,
     store: &'a S,
     addresses: Vec<Address>,
     index: usize,
@@ -19,7 +19,7 @@ where
     S: TokenStore<'a>,
 {
     /// Creates a new store iterator.
-    pub fn new(store: &'a S, chain_id: u8) -> Self {
+    pub fn new(store: &'a S, chain_id: u64) -> Self {
         Self {
             chain_id,
             store,
