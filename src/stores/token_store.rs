@@ -35,7 +35,7 @@ pub trait TokenStore<'a>: Sized {
     }
 
     /// Returns an iterator over the store's tokens.
-    fn iter(&'a self, chain_id: u8) -> StoreIter<Self> {
+    fn iter(&'a self, chain_id: u8) -> StoreIter<'a, Self> {
         StoreIter::new(self, chain_id)
     }
 

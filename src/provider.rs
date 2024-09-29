@@ -42,7 +42,7 @@ where
 
     /// Returns a token from the given store if present, otherwise retrieves
     /// it from its ERC-20 contract and update the store.
-    async fn get_token<'a, Id, S>(&'a self, id: Id, store: &'a mut S) -> Result<&Token, Error>
+    async fn get_token<'a, Id, S>(&'a self, id: Id, store: &'a mut S) -> Result<&'a Token, Error>
     where
         S: TokenStore<'a> + Send,
         Id: Into<TokenId> + Send,
