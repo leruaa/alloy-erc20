@@ -40,6 +40,7 @@ pub trait TokenStore<'a>: Sized {
     }
 
     #[cfg(feature = "known-tokens")]
+    /// Insert a few well known token to the store.
     fn insert_known_tokens(&mut self, chain_id: u64) {
         use crate::{arbitrum, mainnet};
 

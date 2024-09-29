@@ -1,11 +1,9 @@
 use std::fmt::Display;
 
-use thiserror::Error;
-
 use crate::TokenId;
 
 /// Token related error.
-#[derive(Error, Debug)]
+#[derive(thiserror::Error, Debug)]
 pub struct Error {
     /// The error token.
     pub token: TokenId,
@@ -30,7 +28,7 @@ impl Display for Error {
 }
 
 /// Token related possible errors
-#[derive(Error, Debug)]
+#[derive(thiserror::Error, Debug)]
 pub enum InternalError {
     #[error("The token {0} is not present in the store")]
     NotInStore(String),

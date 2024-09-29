@@ -15,7 +15,7 @@ pub struct LruTokenStore {
 }
 
 impl LruTokenStore {
-    /// Creates a new [`BasicTokenStore`]
+    /// Creates a new [`LruTokenStore`]
     pub fn new(cap: NonZeroUsize) -> Self {
         Self {
             tokens: RwLock::new(LruCache::new(cap)),

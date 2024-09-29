@@ -14,8 +14,12 @@ description = """
 Interact with ERC-20 contracts using Alloy.
 """
 
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+
 [features]
-default = ["lru-store"]
+default = []
 known-tokens = []
 lru-store = ["dep:lru", "dep:parking_lot"]
 
@@ -44,3 +48,16 @@ parking_lot = { version = "0.12", optional = true, features = ["arc_lock"] }
 tokio = { version = "1", features = ["rt", "macros"] }
 reqwest = "0.12"
 dotenv = "0.15"
+
+
+[[example]]
+name = "provider_ext"
+doc-scrape-examples = true
+
+[[example]]
+name = "basic_store"
+doc-scrape-examples = true
+
+[[example]]
+name = "lazy"
+doc-scrape-examples = true
