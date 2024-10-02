@@ -1,6 +1,6 @@
 [package]
 name = "alloy-erc20"
-version = "0.2.1"
+version = "0.4.0"
 edition = "2021"
 authors = ["leruaa"]
 keywords = ["alloy", "ethereum", "erc20"]
