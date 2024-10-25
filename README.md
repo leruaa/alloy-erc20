@@ -10,7 +10,7 @@ contracts.
 Add `alloy-erc20` to your `Cargo.toml`.
 
 ```toml
-alloy-erc20 = "0.4"
+alloy-erc20 = "0.5"
 ```
 
 ## Features
