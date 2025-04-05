@@ -1,7 +1,6 @@
 use std::{
     fmt::Debug,
     future::{ready, IntoFuture},
-    marker::PhantomData,
 };
 
 use alloy::{
@@ -28,7 +27,6 @@ pub struct LazyToken<P, T, N> {
     symbol: OnceCell<String>,
     decimals: OnceCell<u8>,
     instance: Erc20Contract::Erc20ContractInstance<T, P, N>,
-    phantom: PhantomData<(T, N)>,
 }
 
 impl<P, T, N> LazyToken<P, T, N>
@@ -44,7 +42,6 @@ where
             symbol: OnceCell::new(),
             decimals: OnceCell::new(),
             instance: Erc20Contract::Erc20ContractInstance::new(address, provider),
-            phantom: PhantomData,
         }
     }
 
