@@ -1,14 +1,9 @@
-use std::{
-    fmt::Debug,
-    future::{ready, IntoFuture},
-};
-
+use crate::provider::Erc20Contract;
 use alloy::{
+    contract::private::{Provider, Transport},
     contract::Error,
     network::Network,
     primitives::{Address, U256},
-    providers::Provider,
-    transports::Transport,
 };
 use async_once_cell::OnceCell;
 use bigdecimal::{
@@ -16,8 +11,10 @@ use bigdecimal::{
     BigDecimal,
 };
 use futures::TryFutureExt;
-
-use crate::provider::Erc20Contract;
+use std::{
+    fmt::Debug,
+    future::{ready, IntoFuture},
+};
 
 #[derive(Debug)]
 /// A token with an embedded contract instance that lazily query the
@@ -41,7 +38,7 @@ where
             name: OnceCell::new(),
             symbol: OnceCell::new(),
             decimals: OnceCell::new(),
-            instance: Erc20Contract::Erc20ContractInstance::new(address, provider),
+            instance: Erc20Contract::new(address, provider),
         }
     }
 
