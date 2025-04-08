@@ -1,9 +1,6 @@
-use alloy::{
-    network::Network, primitives::Address, providers::Provider, sol, transports::Transport,
-};
+use alloy::{network::Network, primitives::Address, providers::Provider, sol};
 use async_trait::async_trait;
 use bigdecimal::BigDecimal;
-
 use crate::{error::InternalError, stores::TokenStore, Entry, Error, Token, TokenId};
 
 sol!(
@@ -14,9 +11,8 @@ sol!(
 
 /// Extends Alloy [`Provider`] trait with ERC-20 related features.
 #[async_trait]
-pub trait Erc20ProviderExt<T, N>: Provider<T, N> + Sized
+pub trait Erc20ProviderExt<N>: Provider<N> + Sized
 where
-    T: Transport + Clone,
     N: Network,
 {
     /// Retrieves a token by querying its ERC-20 contract.
@@ -87,10 +83,9 @@ where
 }
 
 #[async_trait]
-impl<P, T, N> Erc20ProviderExt<T, N> for P
+impl<P, N> Erc20ProviderExt<N> for P
 where
-    P: Provider<T, N>,
-    T: Transport + Clone,
+    P: Provider<N>,
     N: Network,
 {
 }

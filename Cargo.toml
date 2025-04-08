@@ -24,7 +24,7 @@ known-tokens = []
 lru-store = ["dep:lru", "dep:parking_lot"]
 
 [dependencies]
-alloy = { version = "0.5", features = [
+alloy = { version = "0.13.0", features = [
     "network",
     "providers",
     "transports",
@@ -37,7 +37,7 @@ alloy = { version = "0.5", features = [
 ] }
 futures = "0.3"
 bigdecimal = "0.4"
-thiserror = "1.0"
+thiserror = "2.0.12"
 once_cell = "1.18"
 async-once-cell = "0.5"
 async-trait = "0.1"
