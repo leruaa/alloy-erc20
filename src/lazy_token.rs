@@ -1,10 +1,10 @@
 use crate::provider::Erc20Contract;
 use alloy::{
-    contract::private::{Provider, Transport},
-    contract::Error,
     network::Network,
     primitives::{Address, U256},
+    providers::Provider,
 };
+use alloy::contract::Error;
 use async_once_cell::OnceCell;
 use bigdecimal::{
     num_bigint::{BigInt, Sign},
@@ -19,17 +19,16 @@ use std::{
 #[derive(Debug)]
 /// A token with an embedded contract instance that lazily query the
 /// blockchain.
-pub struct LazyToken<P, T, N> {
+pub struct LazyToken<P, N> {
     name: OnceCell<String>,
     symbol: OnceCell<String>,
     decimals: OnceCell<u8>,
-    instance: Erc20Contract::Erc20ContractInstance<T, P, N>,
+    instance: Erc20Contract::Erc20ContractInstance<P, N>,
 }
 
-impl<P, T, N> LazyToken<P, T, N>
+impl<P, N> LazyToken<P, N>
 where
-    P: Provider<T, N>,
-    T: Transport + Clone,
+    P: Provider<N>,
     N: Network,
 {
     /// Creates a new [`LazyToken`].
@@ -55,7 +54,7 @@ where
                     .name()
                     .call()
                     .into_future()
-                    .and_then(|r| ready(Ok(r._0))),
+                    .and_then(|r| ready(Ok(r))),
             )
             .await
     }
@@ -68,7 +67,7 @@ where
                     .symbol()
                     .call()
                     .into_future()
-                    .and_then(|r| ready(Ok(r._0))),
+                    .and_then(|r| ready(Ok(r))),
             )
             .await
     }
@@ -81,7 +80,7 @@ where
                     .decimals()
                     .call()
                     .into_future()
-                    .and_then(|r| ready(Ok(r._0))),
+                    .and_then(|r| ready(Ok(r))),
             )
             .await
     }
@@ -92,7 +91,7 @@ where
             .totalSupply()
             .call()
             .into_future()
-            .and_then(|r| ready(Ok(r._0)))
+            .and_then(|r| ready(Ok(r)))
             .await
     }
 
@@ -102,7 +101,7 @@ where
             .balanceOf(account)
             .call()
             .into_future()
-            .and_then(|r| ready(Ok(r.balance)))
+            .and_then(|r| ready(Ok(r)))
             .await
     }
 
@@ -113,7 +112,7 @@ where
             .allowance(owner, spender)
             .call()
             .into_future()
-            .and_then(|r| ready(Ok(r._0)))
+            .and_then(|r| ready(Ok(r)))
             .await
     }
 

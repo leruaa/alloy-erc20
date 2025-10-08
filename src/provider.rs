@@ -31,7 +31,7 @@ where
             .await
             .map_err(|err| Error::new(address.into(), err))?;
 
-        let token = Token::new(address, symbol._0, decimals._0);
+        let token = Token::new(address, symbol, decimals);
 
         Ok(token)
     }
@@ -76,7 +76,7 @@ where
 
         let token = self.retrieve_token(token).await?;
 
-        let balance = token.get_balance(result.balance);
+        let balance = token.get_balance(result);
 
         Ok(balance)
     }

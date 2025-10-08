@@ -8,8 +8,8 @@ use std::env;
 async fn main() {
     dotenv().ok();
 
-    let eth_rpc = env::var("ETH_RPC").unwrap();
-    let provider = ProviderBuilder::new().on_http(eth_rpc.parse().unwrap());
+    let eth_rpc = env::var("ETH_MAINNET_RPC").unwrap();
+    let provider = ProviderBuilder::new().connect_http(eth_rpc.parse().unwrap());
 
     // Just retrieve a token from its address
     let dai = provider
