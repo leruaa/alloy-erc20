@@ -24,7 +24,7 @@ known-tokens = []
 lru-store = ["dep:lru", "dep:parking_lot"]
 
 [dependencies]
-alloy = { version = "1.6.3", features = [
+alloy = { version = "1.8", features = [
     "network",
     "providers",
     "transports",
@@ -50,9 +50,9 @@ tokio = { version = "1", features = ["rt", "macros"] }
 reqwest = "0.13"
 dotenvy = "0.15"
 testcontainers-modules = { version = "0.12", features = ["anvil"] }
-alloy-provider = { version = "1.1.1", features = ["anvil-api"] }
-alloy-rpc-client = "1.1.1"
-alloy-transport-http = "1.1.1"
+alloy-provider = { version = "1.8", features = ["anvil-api"] }
+alloy-rpc-client = "1.8"
+alloy-transport-http = "1.8"
 
 
 [[example]]
